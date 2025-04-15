@@ -1,0 +1,59 @@
+# ███╗░░██╗░█████╗░███╗░░░███╗███████╗██████╗░  ░█████╗░██╗░░██╗███████╗░██████╗████████╗
+# ████╗░██║██╔══██╗████╗░████║██╔════╝██╔══██╗  ██╔══██╗██║░░██║██╔════╝██╔════╝╚══██╔══╝
+# ██╔██╗██║███████║██╔████╔██║█████╗░░██║░░██║  ██║░░╚═╝███████║█████╗░░╚█████╗░░░░██║░░░
+# ██║╚████║██╔══██║██║╚██╔╝██║██╔══╝░░██║░░██║  ██║░░██╗██╔══██║██╔══╝░░░╚═══██╗░░░██║░░░
+# ██║░╚███║██║░░██║██║░╚═╝░██║███████╗██████╔╝  ╚█████╔╝██║░░██║███████╗██████╔╝░░░██║░░░
+# ╚═╝░░╚══╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝╚═════╝░  ░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░░░░╚═╝░░░
+
+# Разработчик: ILeZzoV
+
+# Ссылки:
+# • Contact with me / Связаться: https://t.me/ilezovofficial
+# • Telegram Channel / Телеграм канал: https://t.me/ilezzov
+# • GitHub: https://github.com/ilezzov-code
+
+# Поддержать разработчика:
+# • DA: https://www.donationalerts.com/r/ilezzov_dev
+# • YooMoney: https://yoomoney.ru/to/4100118180919675
+# • Telegram Gift: https://t.me/ilezovofficial
+# • TON: UQCInXoHOJAlMpZ-8GIHqv1k0dg2E4pglKAIxOf3ia5xHmKV
+# • BTC: 1KCM1QN9TNYRevvQD63UF81oBRSK67vCon
+# • Card: 5536914188326494
+
+# Доступные языки сообщений:
+# ru-RU
+language: "ru-RU"
+
+# Включить / Отключить возможность давать имя блоку
+# Поддерэиваемые блоки: CHEST (сундук), TRAPPED_CHEST (сундук-ловушка),
+# BARREL (бочка), FURNACE (печка), SMOKER (коптильня), BLAST_FURNACE (плавильня), HOPPER (воронка),
+# DISPENSER (раздатчик), DROPPER (выбрасыватель), BREWING_STAND (варочная стойка), SHULKER_BOX (шалкер бокс)
+supporting_block:
+  - CHEST
+  - TRAPPED_CHEST
+  - BARREL
+  - FURNACE
+  - SMOKER
+  - BLAST_FURNACE
+  - HOPPER
+  - DISPENSER
+  - DROPPER
+  - BREWING_STAND
+  - SHULKER_BOX
+
+# Максимальная дистанция до нужного блока
+block_max_distant: 5
+
+# Настроить название предмета:
+name_settings:
+  # Включить / Отключить поддержку цветных названий
+  support_color: true
+  # Установить максимальную длину названия в символах
+  max_name_length: 25
+
+# Не редактируйте это
+config_version: 1.0
+
+
+
+

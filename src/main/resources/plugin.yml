@@ -1,0 +1,14 @@
+name: NamedChest
+version: 1.0
+main: ru.ilezzov.namedchest.Main
+api-version: '1.21'
+prefix: NamedChest
+load: STARTUP
+authors: [ ILeZzoV ]
+description: Назовите ваш сундук любым именем!
+website: https://t.me/ilezovofficial
+commands:
+  namedchest:
+    description: "Главная команда плагина"
+    usage: /namedchest <set/clear/reload>
+    aliases: [ nc ]

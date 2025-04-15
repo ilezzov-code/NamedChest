@@ -1,0 +1,31 @@
+# Плагин поддерживает все виды форматирования сообщений.
+# LEGACY — Цвет через & / § и HEX через &#rrggbb / §#rrggbb или &x&r&r&g&g&b&b / §x§r§r§g§g§b§b
+# LEGACY_ADVANCED — Цвет и HEX через &##rrggbb / §##rrggbb
+# MINI_MESSAGE — Цвет через <цвет> Подробнее — https://docs.advntr.dev/minimessage/index.html
+# И все форматы доступные на https://www.birdflop.com/resources/rgb/
+# Вы можете использовать все форматы одновременно в одном сообщении. Плагин это поддерживает
+
+Plugin:
+  plugin-prefix: "&6NamedChest &8|" #Префикс плагина. Используйте {P} в сообщениях
+  plugin-reload: "{P} &7Плагин успешно &aперезагружен"
+  plugin-has-error-reload: "{P} &7Возникла ошибка при перезагрузке плагина: &c{ERROR}"
+
+Messages:
+  command-permission-error: "{P} &cУ вас нет прав для выполнения этой команды O_o"
+  command-no-console-error: "{P} &cЭта команда доступна только для игроков!"
+  command-main-message: "{P} &7Помощь по командам плагина: \n\n
+    &e/namedchest &7— отправить это сообщение \n
+    &e/namedchest set <name> &7— установить имя \n
+    &e/namedchest clear &7— очистить имя\n
+    &e/namedchest reload&7— перезагрузить плагин \n\n
+  &7Разработчик: &6{DEVELOPER} \n
+  &7Связаться: <click:open_url:{CONTACT_LINK}>&e{CONTACT_LINK}"
+
+  name-clear: "{P} &7Вы успешно очистили имя блока &6{BLOCK}"
+  name-set: "{P} &7Вы успешно установили имя &6{NAME} &r&7на блок &6{BLOCK}"
+  name-empty: "{P} &7Имя не может быть пустым"
+  name-max-length: "{P} &7Имя не должно превышать длину в &6{MAX_LENGTH} &7символов"
+  name-block-error: "{P} &7Невозможно установить имя на этот блок O_o"
+
+# Не редактируйте это
+config_version: 1.0
