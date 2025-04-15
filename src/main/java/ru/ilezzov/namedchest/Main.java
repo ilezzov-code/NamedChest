@@ -8,9 +8,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ru.ilezzov.namedchest.command.*;
 import ru.ilezzov.namedchest.events.listeners.PlayerClickEvent;
 import ru.ilezzov.namedchest.events.listeners.PlayerHover;
+import ru.ilezzov.namedchest.events.listeners.VersionCheckEvent;
 import ru.ilezzov.namedchest.managers.BlockManager;
 import ru.ilezzov.namedchest.managers.HoverManager;
 import ru.ilezzov.namedchest.managers.BlockHoverManager;
+import ru.ilezzov.namedchest.managers.VersionManager;
 import ru.ilezzov.namedchest.models.PluginFile;
 import ru.ilezzov.namedchest.logging.PaperLogger;
 import ru.ilezzov.namedchest.messages.ConsoleMessages;
@@ -20,6 +22,7 @@ import ru.ilezzov.namedchest.logging.Logger;
 import ru.ilezzov.namedchest.utils.Metrics;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public final class Main extends JavaPlugin {
@@ -44,6 +47,8 @@ public final class Main extends JavaPlugin {
     private static String pluginVersion;
     @Getter
     private static String pluginContactLink;
+    @Getter
+    private static boolean outdatedVersion;
 
     // Managers
     @Getter
@@ -52,6 +57,8 @@ public final class Main extends JavaPlugin {
     private static HoverManager hoverManager;
     @Getter
     private static BlockHoverManager blockHoverManager;
+    @Getter
+    private static VersionManager versionManager;
 
     // Files
     @Getter
@@ -62,7 +69,6 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
         pluginLogger = new PaperLogger(this);
 
         // Load plugin files
@@ -77,13 +83,16 @@ public final class Main extends JavaPlugin {
         // Set plugin info
         loadPluginInfo();
 
+        // Check plugin Version
+        checkPluginVersion();
+
         // Register command and events
         registerCommands();
         registerEvents();
 
         sendEnableMessage();
 
-        new Metrics(this, 25478);
+        createBstatsMetrics();
     }
 
     @Override
@@ -116,9 +125,36 @@ public final class Main extends JavaPlugin {
         registerEvents();
     }
 
+    private void checkPluginVersion() {
+        if (configFile.getBoolean("check_updates")) {
+            try {
+                versionManager = new VersionManager(pluginVersion, pluginSettings.getUrlToFileVersion());
+
+                if (versionManager.check()) {
+                    pluginLogger.info(ConsoleMessages.latestPluginVersion(pluginVersion));
+                    outdatedVersion = false;
+                } else {
+                    pluginLogger.info(ConsoleMessages.outdatedPluginVersion(pluginVersion, versionManager.getCurrentPluginVersion(), pluginSettings.getUrlToDownloadLatestVersion()));
+                    outdatedVersion = true;
+                }
+            } catch (URISyntaxException e) {
+                pluginLogger.info(ConsoleMessages.errorOccurred("Invalid link to the GitHub file. link = ".concat(versionManager.getUrlToFileVersion())));
+            } catch (IOException | InterruptedException e ) {
+                pluginLogger.info(ConsoleMessages.errorOccurred("Couldn't send a request to get the plugin version"));
+            }
+        }
+    }
+
+    private void createBstatsMetrics() {
+        if (pluginSettings.isBstatsEnable()) {
+            new Metrics(this, pluginSettings.getBstatsPluginId());
+        }
+    }
+
     private static void registerEvents() {
         Bukkit.getPluginManager().registerEvents(new PlayerHover(), Main.getInstance());
         Bukkit.getPluginManager().registerEvents(new PlayerClickEvent(), Main.getInstance());
+        Bukkit.getPluginManager().registerEvents(new VersionCheckEvent(), Main.getInstance());
     }
 
     private void sendEnableMessage() {

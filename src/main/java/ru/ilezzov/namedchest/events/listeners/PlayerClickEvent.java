@@ -79,14 +79,17 @@ public class PlayerClickEvent implements Listener {
         }
 
         event.setCancelled(true);
-        Component nameComponent = null;
+        Component nameComponent;
 
         if (nameSupportColor) {
             if (PermissionsChecker.hasPermission(player, Permission.SET_COLOR_NAME)) {
                 nameComponent = LegacySerialize.serialize(name);
             }
+            else {
+                nameComponent = Component.text(name);
+            }
         } else {
-            nameComponent = Component.text(name).asComponent();
+            nameComponent = Component.text(name);
         }
 
         NamedApi.setName(container, nameComponent);

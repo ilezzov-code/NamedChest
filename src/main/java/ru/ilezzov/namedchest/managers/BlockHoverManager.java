@@ -28,6 +28,10 @@ public class BlockHoverManager {
         this.playerHover.remove(block.getLocation());
     }
 
+    public void kill(final Block block) {
+        this.playerHover.get(block.getLocation()).remove();
+    }
+
     public void killEntities() {
         for (final Entity entity : playerHover.values()) {
             entity.remove();

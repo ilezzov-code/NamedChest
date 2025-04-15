@@ -1,0 +1,33 @@
+# The plugin supports all types of message formatting.
+# LEGACY — Colors via & / § and HEX via &#rrggbb / §#rrggbb or &x&r&r&g&g&b&b / §x§r§r§g§g§b§b
+# LEGACY_ADVANCED — Color and HEX via &##rrggbb / §##rrggbb
+# MINI_MESSAGE — Color via <color>. More info — https://docs.advntr.dev/minimessage/index.html
+# And all formats available at https://www.birdflop.com/resources/rgb/
+# You can use all formats at the same time in one message. The plugin supports this.
+
+Plugin:
+  plugin-prefix: "&6NamedChest &8|" #Plugin prefix. Use {P} in messages
+  plugin-reload: "{P} &7Plugin successfully &areloaded"
+  plugin-has-error-reload: "{P} &7An error occurred while reloading the plugin: &c{ERROR}"
+  plugin-use-latest-version: "{P} &7You are using the &alatest &7version of the plugin"
+  plugin-use-outdated-version: "{P} &7You are using an outdated version: &c{OUTDATED_VERS} \n&7We recommend updating to the latest version: &6{LATEST_VERS} \n&7Download: <click:open_url:{DOWNLOAD_LINK}>&e{DOWNLOAD_LINK}"
+
+Messages:
+  command-permission-error: "{P} &cYou don't have permission to use this command O_o"
+  command-no-console-error: "{P} &cThis command is only available to players!"
+  command-main-message: "{P} &7Plugin command help: \n\n
+    &e/namedchest &7— send this message \n
+    &e/namedchest set <name> &7— set a name \n
+    &e/namedchest clear &7— clear the name\n
+    &e/namedchest reload &7— reload the plugin \n\n
+  &7Developer: &6{DEVELOPER} \n
+  &7Contact: <click:open_url:{CONTACT_LINK}>&e{CONTACT_LINK}"
+
+  name-clear: "{P} &7Successfully cleared the name of block &6{BLOCK}"
+  name-set: "{P} &7Successfully set the name &6{NAME} &r&7for block &6{BLOCK}"
+  name-empty: "{P} &7Name cannot be empty"
+  name-max-length: "{P} &7Name must not exceed &6{MAX_LENGTH} &7characters"
+  name-block-error: "{P} &7Cannot set a name on this block O_o"
+
+# Do not edit this
+config_version: 1.0

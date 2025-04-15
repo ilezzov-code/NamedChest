@@ -2,14 +2,12 @@ package ru.ilezzov.namedchest.models;
 
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class PluginSettings {
-    private final Yaml yaml = new Yaml();
     private YamlConfiguration file;
 
     @Getter

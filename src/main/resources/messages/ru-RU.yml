@@ -9,6 +9,8 @@ Plugin:
   plugin-prefix: "&6NamedChest &8|" #Префикс плагина. Используйте {P} в сообщениях
   plugin-reload: "{P} &7Плагин успешно &aперезагружен"
   plugin-has-error-reload: "{P} &7Возникла ошибка при перезагрузке плагина: &c{ERROR}"
+  plugin-use-latest-version: "{P} &7Вы используете &aпоследнюю &7версию плагина"
+  plugin-use-outdated-version: "{P} &7Вы используете устаревшую версию: &c{OUTDATED_VERS} \n&7Рекомендуем установить последнюю версию плагина: &6{LATEST_VERS} \n&7Скачать: <click:open_url:{DOWNLOAD_LINK}>&e{DOWNLOAD_LINK}"
 
 Messages:
   command-permission-error: "{P} &cУ вас нет прав для выполнения этой команды O_o"

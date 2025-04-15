@@ -1,6 +1,7 @@
 package ru.ilezzov.namedchest.command;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -61,7 +62,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                String name = args[1];
+                final String name = args[1];
 
                 if (!PermissionsChecker.hasPermission(player, Permission.MAX_LENGHT)) {
                     if (name.length() > nameMaxLength) {
@@ -90,14 +91,17 @@ public class MainCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                Component nameComponent = null;
+                Component nameComponent;
 
                 if (nameSupportColor) {
                     if (PermissionsChecker.hasPermission(player, Permission.SET_COLOR_NAME)) {
                         nameComponent = LegacySerialize.serialize(name);
                     }
+                    else {
+                        nameComponent = Component.text(name);
+                    }
                 } else {
-                    nameComponent = Component.text(name).asComponent();
+                    nameComponent = Component.text(name);
                 }
 
                 NamedApi.setName(container, nameComponent);
@@ -139,6 +143,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
                 }
 
                 NamedApi.clearName(container);
+                Main.getBlockHoverManager().kill(block);
 
                 commandPlaceholders.addPlaceholder("{BLOCK}", block.getType());
                 player.sendMessage(PluginMessages.nameClearMessage(commandPlaceholders));
@@ -171,8 +176,14 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         final List<String> completions = new ArrayList<>();
 
         if(args.length == 1) {
-            if(hasPermission(sender)) {
+            if (hasPermission(sender)) {
                 completions.add("reload");
+            }
+            if (hasPermission(sender, Permission.SET_NAME, Permission.SET_COLOR_NAME)) {
+                completions.add("set");
+            }
+            if (hasPermission(sender, Permission.CLEAR_NAME)) {
+                completions.add("clear");
             }
         }
 

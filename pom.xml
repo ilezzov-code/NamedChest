@@ -12,7 +12,7 @@
     <name>NamedChest</name>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -46,7 +46,7 @@
                         <configuration>
                             <target>
                                 <copy file="${project.build.directory}/${project.build.finalName}.jar"
-                                      tofile="D:/Servers/Testing Plugin/Paper 1.21/plugins/${project.build.finalName}.jar"/>
+                                      tofile="D:/Servers/Testing Plugin/Paper 1.18.2/plugins/${project.build.finalName}.jar"/>
                             </target>
                         </configuration>
                         <goals>
@@ -92,7 +92,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21-R0.1-SNAPSHOT</version>
+            <version>1.18.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

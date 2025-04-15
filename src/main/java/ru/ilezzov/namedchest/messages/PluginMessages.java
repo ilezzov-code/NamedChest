@@ -44,6 +44,9 @@ public class PluginMessages {
         return getComponent("Messages.name-block-error", placeholder);
     }
 
+    public static Component pluginOutdatedVersionMessage(final PluginPlaceholder placeholder) {
+        return getComponent("Plugin.plugin-use-outdated-version", placeholder);
+    }
     private static Component getComponent(final String key) {
         final String message = Main.getMessagesFile().getConfig().getString(key);
 

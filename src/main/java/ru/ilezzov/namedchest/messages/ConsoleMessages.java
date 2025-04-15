@@ -28,6 +28,18 @@ public class ConsoleMessages {
         return LegacySerialize.serialize(message.formatted(keys));
     }
 
+    public static List<Component> outdatedPluginVersion(final String outdatedVersion, final String latestVersion, final String downloadLink) {
+        return getComponents(Main.getPluginSettings().getString("Messages.legacy-plugin-version"), outdatedVersion, latestVersion, downloadLink);
+    }
+
+    public static Component latestPluginVersion(final String pluginVersion) {
+        return getComponent(Main.getPluginSettings().getString("Messages.latest-plugin-version"), pluginVersion);
+    }
+
+    public static Component errorOccurred(final String errorMessage) {
+        return getComponent(Main.getPluginSettings().getString("Messages.has-error"), errorMessage);
+    }
+
     private static List<Component> getComponents(final String message, final Object... keys) {
         final String[] messageSplit = message.formatted(keys).split("\n");
         List<Component> components = new ArrayList<>();
