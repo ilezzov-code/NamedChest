@@ -126,10 +126,6 @@ NamedChest is a plugin that lets you assign custom names to various blocks. Now 
       save_for_breaking: false
       # Forbid giving a name through an anvil Запретить давать имя через наковальню
       cancel_anvil: true
-      # Save the name when the block is destroyed / Сохранять имя при разрушении блока
-      save_for_breaking: false
-      # Forbid giving a name through an anvil Запретить давать имя через наковальню
-      cancel_anvil: true
 
     # Don't edit this / Не редактируйте это
     config_version: 1.0
