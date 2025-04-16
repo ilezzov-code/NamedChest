@@ -28,6 +28,7 @@ Messages:
   name-empty: "{P} &7Name cannot be empty"
   name-max-length: "{P} &7Name must not exceed &6{MAX_LENGTH} &7characters"
   name-block-error: "{P} &7Cannot set a name on this block O_o"
+  name-use-anvil-error: "{P} &7You cannot rename this item using an anvil"
 
 # Do not edit this
-config_version: 1.0
+config_version: 1.1

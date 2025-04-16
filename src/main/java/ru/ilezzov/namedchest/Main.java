@@ -6,9 +6,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.ilezzov.namedchest.command.*;
-import ru.ilezzov.namedchest.events.listeners.PlayerClickEvent;
-import ru.ilezzov.namedchest.events.listeners.PlayerHover;
-import ru.ilezzov.namedchest.events.listeners.VersionCheckEvent;
+import ru.ilezzov.namedchest.events.listeners.*;
 import ru.ilezzov.namedchest.managers.BlockManager;
 import ru.ilezzov.namedchest.managers.HoverManager;
 import ru.ilezzov.namedchest.managers.BlockHoverManager;
@@ -155,6 +153,13 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerHover(), Main.getInstance());
         Bukkit.getPluginManager().registerEvents(new PlayerClickEvent(), Main.getInstance());
         Bukkit.getPluginManager().registerEvents(new VersionCheckEvent(), Main.getInstance());
+
+        if (configFile.getBoolean("name_settings.cancel_anvil")) {
+            Bukkit.getPluginManager().registerEvents(new PlayerUseAnvilEvent(), Main.getInstance());
+        }
+        if (!configFile.getBoolean("name_settings.save_for_breaking")) {
+            Bukkit.getPluginManager().registerEvents(new PlayerBreakBlockEvent(), Main.getInstance());
+        }
     }
 
     private void sendEnableMessage() {

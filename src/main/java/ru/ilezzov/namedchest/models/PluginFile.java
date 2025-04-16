@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,7 +52,7 @@ public class PluginFile {
                 return;
             }
 
-            final YamlConfiguration defaultConfigFile = YamlConfiguration.loadConfiguration(new InputStreamReader(inputStream));
+            final YamlConfiguration defaultConfigFile = YamlConfiguration.loadConfiguration(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             final String defaultConfigFileVersion = defaultConfigFile.getString("config_version");
 
             if (defaultConfigFileVersion == null) {

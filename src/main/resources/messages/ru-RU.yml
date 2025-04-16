@@ -28,6 +28,7 @@ Messages:
   name-empty: "{P} &7Имя не может быть пустым"
   name-max-length: "{P} &7Имя не должно превышать длину в &6{MAX_LENGTH} &7символов"
   name-block-error: "{P} &7Невозможно установить имя на этот блок O_o"
+  name-use-anvil-error: "{P} &7Вы не можете переименовать этот предмет при помощи наковальни"
 
 # Не редактируйте это
-config_version: 1.0
+config_version: 1.1

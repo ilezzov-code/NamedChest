@@ -44,6 +44,10 @@ public class PluginMessages {
         return getComponent("Messages.name-block-error", placeholder);
     }
 
+    public static Component nameUseAnvilError(final PluginPlaceholder placeholder) {
+        return getComponent("Messages.name-use-anvil-error", placeholder);
+    }
+
     public static Component pluginOutdatedVersionMessage(final PluginPlaceholder placeholder) {
         return getComponent("Plugin.plugin-use-outdated-version", placeholder);
     }

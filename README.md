@@ -29,6 +29,10 @@ NamedChest is a plugin that lets you assign custom names to various blocks. Now 
 * Permission system
 * Set / Clear names using the `/nc` command
 
+#### -=-=-= REALESE 1.1 =-=-=-
+* Save or no the name when the block is destroyed
+* Forbid or no giving a name through an anvil
+
 ## Commands
 
 ### /nc set <name>
@@ -118,6 +122,14 @@ NamedChest is a plugin that lets you assign custom names to various blocks. Now 
       support_color: true
       # Max name length / Максимальная длинна имени
       max_name_length: 25
+      # Save the name when the block is destroyed / Сохранять имя при разрушении блока
+      save_for_breaking: false
+      # Forbid giving a name through an anvil Запретить давать имя через наковальню
+      cancel_anvil: true
+      # Save the name when the block is destroyed / Сохранять имя при разрушении блока
+      save_for_breaking: false
+      # Forbid giving a name through an anvil Запретить давать имя через наковальню
+      cancel_anvil: true
 
     # Don't edit this / Не редактируйте это
     config_version: 1.0
