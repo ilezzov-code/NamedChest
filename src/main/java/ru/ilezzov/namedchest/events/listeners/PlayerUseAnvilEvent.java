@@ -6,12 +6,15 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
+
 import ru.ilezzov.namedchest.Main;
+import ru.ilezzov.namedchest.managers.BlockTypeManager;
 import ru.ilezzov.namedchest.messages.PluginMessages;
-import ru.ilezzov.namedchest.models.PluginPlaceholder;
+import ru.ilezzov.namedchest.placeholder.PluginPlaceholder;
 
 public class PlayerUseAnvilEvent implements Listener {
-    final PluginPlaceholder placeholder = new PluginPlaceholder();
+    private final BlockTypeManager blockTypeManager = Main.getBlockTypeManager();
+    private final PluginPlaceholder placeholder = new PluginPlaceholder();
 
     @EventHandler
     public void onPlayerUseAnvilEvent(final InventoryClickEvent event) {
@@ -33,11 +36,11 @@ public class PlayerUseAnvilEvent implements Listener {
             return;
         }
 
-        if (!Main.getBlockManager().contains(itemStack.getType())) {
+        if (!blockTypeManager.contains(itemStack.getType())) {
             return;
         }
 
         event.setCancelled(true);
-        event.getWhoClicked().sendMessage(PluginMessages.nameUseAnvilError(placeholder));
+        event.getWhoClicked().sendMessage(PluginMessages.commandNameUseAnvilError(placeholder));
     }
 }

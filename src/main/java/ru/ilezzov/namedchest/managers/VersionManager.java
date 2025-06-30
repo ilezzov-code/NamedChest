@@ -27,7 +27,6 @@ public class VersionManager {
 
     private String getCurrentPluginVersionFromGitHub() throws URISyntaxException, IOException, InterruptedException {
         final HttpClient httpClient = HttpClient.newHttpClient();
-
         assert this.urlToFileVersion != null;
 
         final HttpRequest httpRequest = HttpRequest.newBuilder(new URI(this.urlToFileVersion))
@@ -35,7 +34,6 @@ public class VersionManager {
                 .build();
 
         final HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        //httpClient.close();
 
         return httpResponse.body();
     }

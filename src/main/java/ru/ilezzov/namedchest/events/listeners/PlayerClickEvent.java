@@ -4,8 +4,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,23 +15,32 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import ru.ilezzov.namedchest.Main;
-import ru.ilezzov.namedchest.api.NamedApi;
-import ru.ilezzov.namedchest.enums.Permission;
+import ru.ilezzov.namedchest.api.NamedChestAPI;
+import ru.ilezzov.namedchest.api.Response;
+import ru.ilezzov.namedchest.api.Status;
 import ru.ilezzov.namedchest.messages.PluginMessages;
-import ru.ilezzov.namedchest.models.PluginPlaceholder;
+import ru.ilezzov.namedchest.permission.Permission;
+import ru.ilezzov.namedchest.permission.PermissionsChecker;
+import ru.ilezzov.namedchest.placeholder.PluginPlaceholder;
 import ru.ilezzov.namedchest.utils.LegacySerialize;
-import ru.ilezzov.namedchest.utils.PermissionsChecker;
 
 public class PlayerClickEvent implements Listener {
+    private final NamedChestAPI api = Main.getApi();
     private final PluginPlaceholder placeholder = new PluginPlaceholder();
-    private final int nameMaxLength = Main.getConfigFile().getInt("name_settings.max_name_length");
-    private final boolean nameSupportColor = Main.getConfigFile().getBoolean("name_settings.support_color");
+
+    private final FileConfiguration configuration = Main.getConfigFile().getConfig();
+    private final ConfigurationSection nameSettings = configuration.getConfigurationSection("name_settings");
+
+    private final boolean supportColor = nameSettings.getBoolean("support_color");
+    private final boolean supportSpaces = nameSettings.getBoolean("support_spaces");
+
+    private final int maxNameLength = nameSettings.getInt("max_name_length");
 
     @EventHandler
-    public void onPlayerInteractEvent(final PlayerInteractEvent event) {
+    public void onPlayerClickEvent(final PlayerInteractEvent event) {
         final Player player = event.getPlayer();
 
-        if (!PermissionsChecker.hasPermission(player, Permission.SET_NAME, Permission.SET_COLOR_NAME)) {
+        if(!PermissionsChecker.hasPermission(player, Permission.NAME_SET, Permission.NAME_SET_COLOR)) {
             return;
         }
 
@@ -38,65 +48,72 @@ public class PlayerClickEvent implements Listener {
             return;
         }
 
-        final ItemStack clickedItem = event.getItem();
+        final ItemStack itemStack = event.getItem();
 
-        if (clickedItem == null) {
+        if (itemStack == null) {
             return;
         }
 
-        if (clickedItem.getType() != Material.NAME_TAG) {
+        if (itemStack.getType() != Material.NAME_TAG) {
             return;
         }
 
         final Block block = event.getClickedBlock();
-        if (!Main.getBlockManager().contains(block.getType())) {
-            player.sendMessage(PluginMessages.nameBlockError(placeholder));
-            return;
-        }
+        final Response response = api.checkBlock(block);
 
-        final ItemMeta nameTagMeta = clickedItem.getItemMeta();
-        if (!nameTagMeta.hasDisplayName()) {
-            event.setCancelled(true);
-            player.sendMessage(PluginMessages.nameEmptyMessage(placeholder));
-            return;
-        }
-
-        final String name = nameTagMeta.getDisplayName();
-        if (!PermissionsChecker.hasPermission(player, Permission.MAX_LENGHT)) {
-            if (name.length() > nameMaxLength) {
-                event.setCancelled(true);
-                placeholder.addPlaceholder("{MAX_LENGTH}", nameMaxLength);
-                player.sendMessage(PluginMessages.nameMaxLength(placeholder));
-                return;
-            }
-        }
-
-        final BlockState blockState = block.getState();
-        if (!(blockState instanceof final Container container)) {
-            event.setCancelled(true);
-            player.sendMessage(PluginMessages.nameBlockError(placeholder));
+        if (response.status() != Status.ACCESS) {
             return;
         }
 
         event.setCancelled(true);
-        Component nameComponent;
 
-        if (nameSupportColor) {
-            if (PermissionsChecker.hasPermission(player, Permission.SET_COLOR_NAME)) {
-                nameComponent = LegacySerialize.serialize(name);
-            }
-            else {
-                nameComponent = Component.text(name);
-            }
-        } else {
-            nameComponent = Component.text(name);
+        final ItemMeta nameTagMeta = itemStack.getItemMeta();
+
+        if (!nameTagMeta.hasDisplayName()) {
+            player.sendMessage(PluginMessages.commandNameEmpty(placeholder));
+            return;
         }
 
-        NamedApi.setName(container, nameComponent);
-        clickedItem.setAmount(clickedItem.getAmount() - 1);
+        final String textName = nameTagMeta.getDisplayName();
+        final Component name;
 
-        placeholder.addPlaceholder("{NAME}", LegacyComponentSerializer.legacySection().serialize(nameComponent));
-        placeholder.addPlaceholder("{BLOCK}", block.getType());
-        player.sendMessage(PluginMessages.nameSetMessage(placeholder));
+        if (supportColor) {
+            if (PermissionsChecker.hasPermission(player, Permission.NAME_SET_COLOR)) {
+                name = LegacySerialize.serialize(textName);
+            } else {
+                name = Component.text(textName);
+            }
+        } else {
+            name = Component.text(textName);
+        }
+
+        if (PermissionsChecker.hasPermission(player, Permission.NAME_MAX_LENGTH)) {
+            api.setName(name, (Container) response.data());
+
+            final Material material = block.getType();
+
+            placeholder.addPlaceholder("{BLOCK}", material);
+            placeholder.addPlaceholder("{NAME}", LegacyComponentSerializer.legacySection().serialize(name));
+
+            player.sendMessage(PluginMessages.commandNameSet(placeholder));
+        } else {
+            final int componentLength = api.componentLength(name);
+
+            if (componentLength > maxNameLength) {
+                placeholder.addPlaceholder("{MAX_LENGTH}", maxNameLength);
+                player.sendMessage(PluginMessages.commandNameMaxLength(placeholder));
+            } else {
+                api.setName(name, (Container) response.data());
+
+                final Material material = block.getType();
+
+                placeholder.addPlaceholder("{BLOCK}", material);
+                placeholder.addPlaceholder("{NAME}", LegacyComponentSerializer.legacySection().serialize(name));
+
+                player.sendMessage(PluginMessages.commandNameSet(placeholder));
+            }
+        }
+        itemStack.setAmount(itemStack.getAmount() -1);
+        player.getInventory().addItem(itemStack);
     }
 }

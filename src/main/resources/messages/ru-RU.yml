@@ -6,29 +6,36 @@
 # Вы можете использовать все форматы одновременно в одном сообщении. Плагин это поддерживает
 
 Plugin:
-  plugin-prefix: "&6NamedChest &8|" #Префикс плагина. Используйте {P} в сообщениях
+  plugin-prefix: "&6CoolLobby &8|" # Префикс плагина. Используйте {P} в сообщениях
   plugin-reload: "{P} &7Плагин успешно &aперезагружен"
   plugin-has-error-reload: "{P} &7Возникла ошибка при перезагрузке плагина: &c{ERROR}"
-  plugin-use-latest-version: "{P} &7Вы используете &aпоследнюю &7версию плагина"
+  plugin-use-latest-version: "{P} &7Вы используете &aпоследнюю &7версию плагина: &6{LATEST_VERS}"
   plugin-use-outdated-version: "{P} &7Вы используете устаревшую версию: &c{OUTDATED_VERS} \n&7Рекомендуем установить последнюю версию плагина: &6{LATEST_VERS} \n&7Скачать: <click:open_url:{DOWNLOAD_LINK}>&e{DOWNLOAD_LINK}"
+  plugin-has-error: "{P} &7Возникла ошибка при выполнении команды O_o → &c{ERROR}"
+  plugin-has-error-check-version: "{P} &7Не удалось получить последнюю версию плагина. Проверьте подключение к интернету"
 
 Messages:
   command-permission-error: "{P} &cУ вас нет прав для выполнения этой команды O_o"
   command-no-console-error: "{P} &cЭта команда доступна только для игроков!"
-  command-main-message: "{P} &7Помощь по командам плагина: \n\n
-    &e/namedchest &7— отправить это сообщение \n
-    &e/namedchest set <name> &7— установить имя \n
-    &e/namedchest clear &7— очистить имя\n
-    &e/namedchest reload&7— перезагрузить плагин \n\n
-  &7Разработчик: &6{DEVELOPER} \n
-  &7Связаться: <click:open_url:{CONTACT_LINK}>&e{CONTACT_LINK}"
+  command-cooldown: "{P} &7Подождите еще &6{TIME} &7сек. перед выполнением этой команды"
+  command-disable: "{P} &7Эта команда отключена администратором сервера"
 
-  name-clear: "{P} &7Вы успешно очистили имя блока &6{BLOCK}"
-  name-set: "{P} &7Вы успешно установили имя &6{NAME} &r&7на блок &6{BLOCK}"
-  name-empty: "{P} &7Имя не может быть пустым"
-  name-max-length: "{P} &7Имя не должно превышать длину в &6{MAX_LENGTH} &7символов"
-  name-block-error: "{P} &7Невозможно установить имя на этот блок O_o"
-  name-use-anvil-error: "{P} &7Вы не можете переименовать этот предмет при помощи наковальни"
+  command-main-message: "{P} &7Помощь по командам плагина: \n\n
+      &e/nc &7— отправить это сообщение \n
+      &e/nc set <name> &7— установить имя \n
+      &e/nc clear &7— очистить имя \n 
+      &e/nc version &7— узнать актуальную версию плагина \n
+      &e/nc reload &7— перезагрузить плагин \n\n
+    &7Разработчик: &6{DEVELOPER} \n
+    &7Связаться: <click:open_url:{CONTACT_LINK}>&e{CONTACT_LINK}"
+
+  command-name-set: "{P} &7Вы успешно установили имя &6{NAME} &r&7на блок &6{BLOCK}"
+  command-name-clear: "{P} &7Вы успешно очистили имя блока &6{BLOCK}"
+  command-name-empty: "{P} &7Имя не может быть пустым"
+  command-name-max-length: "{P} &7Имя не должно превышать длину в &6{MAX_LENGTH} &7символов"
+  command-name-block-null: "{P} &7Блок не может быть воздухом"
+  command-name-block-error: "{P} &7Невозможно установить имя на этот блок O_o"
+  command-name-use-anvil-error: "{P} &7Вы не можете переименовать этот блок при помощи наковальни"
 
 # Не редактируйте это
-config_version: 1.1
+config_version: 1.2

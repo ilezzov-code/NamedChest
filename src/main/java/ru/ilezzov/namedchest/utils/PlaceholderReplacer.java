@@ -1,6 +1,6 @@
 package ru.ilezzov.namedchest.utils;
 
-import ru.ilezzov.namedchest.models.PluginPlaceholder;
+import ru.ilezzov.namedchest.placeholder.PluginPlaceholder;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
