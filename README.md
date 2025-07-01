@@ -10,7 +10,7 @@
     </a>
 </div>
 
-### <a href="https://github.com/ilezzov-code/NamedChest/tree/main"><img src="img/flags/ru.svg" width=15px> Выбрать русский README.md</a>
+### <a href="https://github.com/ilezzov-code/NamedChest/blob/main/README_RU.md"><img src="img/flags/ru.svg" width=15px> Выбрать русский README.md</a>
 
 ##  <a>Table of Contents</a>
 
