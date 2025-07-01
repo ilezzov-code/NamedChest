@@ -227,12 +227,12 @@ You can assign names to blocks using tags.
 ## <a id="links">Links</a>
 
 * Contact: https://t.me/ilezovofficial
-* Telegram Channel: https://t.me/ilezzov_en
+* Telegram Channel: https://t.me/ilezzov
 * Modrinth: https://modrinth.com/plugin/namedchest
 
 ## <a id="donate">Buy me coffee</a>
 
-* DA: https://www.donationalerts.com/r/ilezzov_dev
+* DA: https://www.donationalerts.com/r/ilezov
 * YooMoney: https://yoomoney.ru/to/4100118180919675
 * Telegram Gift: https://t.me/ilezovofficial
 * TON: UQCInXoHOJAlMpZ-8GIHqv1k0dg2E4pglKAIxOf3ia5xHmKV
