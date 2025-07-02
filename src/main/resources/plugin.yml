@@ -1,6 +1,6 @@
 name: NamedChest
 description: Hologram names for chests
-version: '1.2'
+version: ${project.version}
 main: ru.ilezzov.namedchest.Main
 api-version: '1.18'
 prefix: NamedChest
