@@ -1,5 +1,5 @@
 name: NamedChest
-description: Hologram names for chests
+description: Hologram names for your storage facilities
 version: ${project.version}
 main: ru.ilezzov.namedchest.Main
 api-version: '1.18'

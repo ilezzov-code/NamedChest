@@ -118,7 +118,42 @@ public class PlayerClickEvent implements Listener {
                 player.sendMessage(PluginMessages.commandNameSet(placeholder));
             }
         }
-        itemStack.setAmount(itemStack.getAmount() -1);
-        player.getInventory().addItem(itemStack);
+        removeTagFromInventory(player, itemStack);
+    }
+
+    private void removeTagFromInventory(final Player player, final ItemStack nameTag) {
+        final String displayName = nameTag.getItemMeta().getDisplayName();
+
+        for (int i = 0; i < player.getInventory().getSize(); i++) {
+            final ItemStack itemStack = player.getInventory().getItem(i);
+
+            if (itemStack == null) {
+                continue;
+            }
+
+            if (itemStack.getAmount() < 1) {
+                continue;
+            }
+
+            if (itemStack.getType() != nameTag.getType()) {
+                continue;
+            }
+
+            if (!itemStack.hasItemMeta()) {
+                continue;
+            }
+
+            final ItemMeta itemMeta = itemStack.getItemMeta();
+
+            if (!itemMeta.hasDisplayName()) {
+                continue;
+            }
+
+            if (itemMeta.getDisplayName().equals(displayName)) {
+                itemStack.setAmount(itemStack.getAmount() -1);
+                player.getInventory().setItem(i, itemStack);
+                break;
+            }
+        }
     }
 }
