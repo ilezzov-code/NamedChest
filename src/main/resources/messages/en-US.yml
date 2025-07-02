@@ -6,7 +6,7 @@
 # You can use all formats simultaneously in one message. The plugin supports this.
 
 Plugin:
-  plugin-prefix: "&6CoolLobby &8|" # Plugin prefix. Use {P} in messages
+  plugin-prefix: "&6NamedChest &8|" # Plugin prefix. Use {P} in messages
   plugin-reload: "{P} &7Plugin successfully &areloaded"
   plugin-has-error-reload: "{P} &7An error occurred while reloading the plugin: &c{ERROR}"
   plugin-use-latest-version: "{P} &7You are using the &alatest &7version of the plugin: &6{LATEST_VERS}"
