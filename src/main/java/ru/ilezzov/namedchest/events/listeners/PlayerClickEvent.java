@@ -74,8 +74,13 @@ public class PlayerClickEvent implements Listener {
             return;
         }
 
-        final String textName = nameTagMeta.getDisplayName();
+        String textName = nameTagMeta.getDisplayName();
+        final String[] textNameSplit = textName.split("\\s+");
         final Component name;
+
+        if (!supportSpaces) {
+            textName = textNameSplit[0];
+        }
 
         if (supportColor) {
             if (PermissionsChecker.hasPermission(player, Permission.NAME_SET_COLOR)) {
