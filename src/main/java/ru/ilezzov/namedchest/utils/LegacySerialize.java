@@ -26,7 +26,7 @@ public class LegacySerialize {
         if (message == null) {
             return Component.empty();
         }
-        return MiniMessage.miniMessage().deserialize(legacySerialize(message));
+        return MiniMessage.get().deserialize(legacySerialize(message));
     }
 
     public static String serializeToString(final String message) {
