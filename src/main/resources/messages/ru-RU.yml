@@ -19,6 +19,7 @@ Messages:
   command-no-console-error: "{P} &cЭта команда доступна только для игроков!"
   command-cooldown: "{P} &7Подождите еще &6{TIME} &7сек. перед выполнением этой команды"
   command-disable: "{P} &7Эта команда отключена администратором сервера"
+  command-not-owned-region: "{P} &7Вы находитесь не в своем регионе"
 
   command-main-message: "{P} &7Помощь по командам плагина: \n\n
       &e/nc &7— отправить это сообщение \n
@@ -38,4 +39,4 @@ Messages:
   command-name-use-anvil-error: "{P} &7Вы не можете переименовать этот блок при помощи наковальни"
 
 # Не редактируйте это
-config_version: 1.2
+config_version: ${project.version}

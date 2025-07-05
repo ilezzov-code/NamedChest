@@ -52,6 +52,10 @@ public class PluginMessages {
         return getComponent("Messages.command-disable", placeholder);
     }
 
+    public static Component commandNotOwnedRegion(final PluginPlaceholder placeholder) {
+        return getComponent("Messages.command-not-owned-region", placeholder);
+    }
+
     public static Component commandNameSet(final PluginPlaceholder placeholder) {
         return getComponent("Messages.command-name-set", placeholder);
     }

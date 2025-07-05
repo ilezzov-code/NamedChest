@@ -26,4 +26,4 @@ Messages:
   event-loaded: "Event &6%s &r has been loaded"
   api-loaded: "Plugin api has been loaded"
 
-  world-loaded: "The lobby world &6%s &r has been loaded"
+  supported-worldguard: "&7WorldGuard is &asupported"

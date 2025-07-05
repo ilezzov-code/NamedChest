@@ -19,6 +19,7 @@ Messages:
   command-no-console-error: "{P} &cThis command is only available to players!"
   command-cooldown: "{P} &7Please wait &6{TIME} &7seconds before executing this command"
   command-disable: "{P} &7This command is disabled by the server administrator"
+  command-not-owned-region: "{P} &7You are not in your region"
 
   command-main-message: "{P} &7Help for plugin commands: \n\n
       &e/nc &7— send this message \n
@@ -38,4 +39,4 @@ Messages:
   command-name-use-anvil-error: "{P} &7You cannot rename this block using an anvil"
 
 # Do not edit this
-config_version: 1.2
+config_version: ${project.version}

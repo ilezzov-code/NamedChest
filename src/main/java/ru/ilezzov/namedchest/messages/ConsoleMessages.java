@@ -34,20 +34,8 @@ public class ConsoleMessages {
         return getComponent(Objects.requireNonNull(messages.getString("error-occurred")), errorMessage);
     }
 
-    public static Component successConnectToDatabase() {
-        return getComponent(Objects.requireNonNull(messages.getString("success-connect-to-database")));
-    }
-
-    public static Component databaseError(final String errorMessage) {
-        return getComponent(Objects.requireNonNull(messages.getString("database-error")), errorMessage);
-    }
-
-    public static Component savePlayer(final String displayName) {
-        return getComponent(Objects.requireNonNull(messages.getString("save-player")), displayName);
-    }
-
-    public static Component saveQueue() {
-        return getComponent(Objects.requireNonNull(messages.getString("save-queue")));
+    public static Component supportedWorldGuard() {
+        return getComponent(Objects.requireNonNull(messages.getString("supported-worldguard")));
     }
 
     public static List<Component> pluginEnable(final String pluginDeveloper, final String pluginVersion, final String pluginContactLink) {

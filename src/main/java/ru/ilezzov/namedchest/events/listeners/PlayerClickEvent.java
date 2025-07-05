@@ -1,5 +1,7 @@
 package ru.ilezzov.namedchest.events.listeners;
 
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
@@ -60,6 +62,14 @@ public class PlayerClickEvent implements Listener {
 
         final Block block = event.getClickedBlock();
         final Response response = api.checkBlock(block);
+
+        if (Main.isSupportWorldGuard()) {
+            if (!api.isPlayerInRegion(player, block.getLocation())) {
+                player.sendMessage(PluginMessages.commandNotOwnedRegion(placeholder));
+                return;
+            }
+        }
+
 
         if (response.status() != Status.ACCESS) {
             return;

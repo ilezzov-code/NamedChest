@@ -1,4 +1,4 @@
-name: NamedChest
+name: ${project.artifactId}
 description: Hologram names for your storage facilities
 version: ${project.version}
 main: ru.ilezzov.namedchest.Main
@@ -11,3 +11,5 @@ commands:
   namedchest:
     aliases: [ nc ]
     usage: nc [help|set|remove|reload]
+softdepend:
+  - WorldGuard

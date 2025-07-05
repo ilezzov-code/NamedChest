@@ -2,9 +2,7 @@ package ru.ilezzov.namedchest.commands.executors;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.command.Command;
@@ -84,6 +82,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         Main.reloadPluginInfo();
 
         Main.checkPluginVersion();
+        Main.loadWorldGuard();
 
         Main.getBlockTypeManager().reload();
         Main.getBlockHoverManager().killAll();
@@ -148,6 +147,13 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 
         final Block block = player.getTargetBlock(maxDistance);
         final Response response = api.checkBlock(block);
+
+        if (Main.isSupportWorldGuard()) {
+            if (!api.isPlayerInRegion(player, block.getLocation())) {
+                player.sendMessage(PluginMessages.commandNotOwnedRegion(commandPlaceholders));
+                return true;
+            }
+        }
 
         switch (response.status()) {
             case NULL_BLOCK -> sender.sendMessage(PluginMessages.commandNameBlockNull(commandPlaceholders));
@@ -243,6 +249,13 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 
         final Block block = player.getTargetBlock(maxDistance);
         final Response response = api.checkBlock(block);
+
+        if (Main.isSupportWorldGuard()) {
+            if (!api.isPlayerInRegion(player, block.getLocation())) {
+                player.sendMessage(PluginMessages.commandNotOwnedRegion(commandPlaceholders));
+                return true;
+            }
+        }
 
         switch (response.status()) {
             case NULL_BLOCK -> sender.sendMessage(PluginMessages.commandNameBlockNull(commandPlaceholders));

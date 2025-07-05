@@ -1,6 +1,10 @@
 package ru.ilezzov.namedchest;
 
+import com.sk89q.worldguard.WorldGuard;
 import lombok.Getter;
+import lombok.Setter;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.ilezzov.namedchest.api.ApiImpl;
 import ru.ilezzov.namedchest.api.NamedChestAPI;
@@ -11,11 +15,13 @@ import ru.ilezzov.namedchest.logging.PaperLogger;
 import ru.ilezzov.namedchest.managers.BlockHoverManager;
 import ru.ilezzov.namedchest.managers.BlockTypeManager;
 import ru.ilezzov.namedchest.managers.VersionManager;
+import ru.ilezzov.namedchest.messages.ConsoleMessages;
 import ru.ilezzov.namedchest.settings.PluginSettings;
 import ru.ilezzov.namedchest.stats.PluginStats;
 import ru.ilezzov.namedchest.utils.ListUtils;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -49,6 +55,9 @@ public final class Main extends JavaPlugin {
     private static boolean outdatedVersion;
     @Getter
     private static String messageLanguage;
+    @Getter
+    @Setter
+    private static boolean supportWorldGuard = false;
 
     // Files
     @Getter
@@ -68,6 +77,9 @@ public final class Main extends JavaPlugin {
     @Getter
     private static EventManager eventManager;
 
+    @Getter
+    private static WorldGuard worldGuard;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -84,6 +96,9 @@ public final class Main extends JavaPlugin {
 
         // Check plugin version
         checkPluginVersion();
+
+        // Load WorldGuard
+        loadWorldGuard();
 
         // Load managers
         loadManagers();
@@ -127,6 +142,25 @@ public final class Main extends JavaPlugin {
                 pluginLogger.info(errorOccurred("Couldn't send a request to get the plugin version"));
             }
         }
+    }
+
+
+    public static void loadWorldGuard() {
+        final boolean supportWorldGuard = configFile.getBoolean("support_worldguard");
+
+        if (!supportWorldGuard) {
+            return;
+        }
+
+        final Plugin worldGuardPlugin = Bukkit.getPluginManager().getPlugin("WorldGuard");
+
+        if (worldGuardPlugin == null) {
+            return;
+        }
+
+        worldGuard = WorldGuard.getInstance();
+        setSupportWorldGuard(true);
+        pluginLogger.info(ConsoleMessages.supportedWorldGuard());
     }
 
     private void loadSettings() {
