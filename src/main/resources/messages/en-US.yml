@@ -37,6 +37,7 @@ Messages:
   command-name-block-null: "{P} &7The block cannot be air"
   command-name-block-error: "{P} &7Unable to set name on this block O_o"
   command-name-use-anvil-error: "{P} &7You cannot rename this block using an anvil"
+  command-name-already-clear: "{P} &7There is no name for this block"
 
 # Do not edit this
 config_version: ${project.version}

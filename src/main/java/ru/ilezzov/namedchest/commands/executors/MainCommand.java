@@ -260,6 +260,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         switch (response.status()) {
             case NULL_BLOCK -> sender.sendMessage(PluginMessages.commandNameBlockNull(commandPlaceholders));
             case INVALUABLE_BLOCK -> sender.sendMessage(PluginMessages.commandNameBlockError(commandPlaceholders));
+            case NULL_DISPLAY_NAME -> sender.sendMessage(PluginMessages.commandNameAlreadyClear(commandPlaceholders));
             case ACCESS -> {
                 api.removeName((Container) response.data());
                 Main.getBlockHoverManager().kill(block.getLocation());

@@ -37,6 +37,7 @@ Messages:
   command-name-block-null: "{P} &7Блок не может быть воздухом"
   command-name-block-error: "{P} &7Невозможно установить имя на этот блок O_o"
   command-name-use-anvil-error: "{P} &7Вы не можете переименовать этот блок при помощи наковальни"
+  command-name-already-clear: "{P} &7У этого блока нет имени"
 
 # Не редактируйте это
 config_version: ${project.version}

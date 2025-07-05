@@ -35,6 +35,10 @@ public class ApiImpl implements NamedChestAPI{
             return new Response(Status.INVALUABLE_BLOCK, null);
         }
 
+        if (container.customName() == null) {
+            return new Response(Status.NULL_DISPLAY_NAME, null);
+        }
+
         return new Response(Status.ACCESS, container);
     }
 

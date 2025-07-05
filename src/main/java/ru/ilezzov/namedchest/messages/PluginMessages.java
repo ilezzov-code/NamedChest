@@ -84,6 +84,10 @@ public class PluginMessages {
         return getComponent("Messages.command-name-use-anvil-error", placeholder);
     }
 
+    public static Component commandNameAlreadyClear(final PluginPlaceholder placeholder) {
+        return getComponent("Messages.command-name-already-clear", placeholder);
+    }
+
     private static Component getComponent(final String key) {
         final String message = getMessages().getConfig().getString(key);
 
