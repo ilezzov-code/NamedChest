@@ -64,12 +64,13 @@ public class PlayerClickEvent implements Listener {
         final Response response = api.checkBlock(block);
 
         if (Main.isSupportWorldGuard()) {
-            if (!api.isPlayerInRegion(player, block.getLocation())) {
-                player.sendMessage(PluginMessages.commandNotOwnedRegion(placeholder));
-                return;
+            if (!PermissionsChecker.hasPermission(player, Permission.IGNORE_REGIONS)) {
+                if (!api.isPlayerInRegion(player, block.getLocation())) {
+                    player.sendMessage(PluginMessages.commandNotOwnedRegion(placeholder));
+                    return;
+                }
             }
         }
-
 
         if (response.status() != Status.ACCESS) {
             return;

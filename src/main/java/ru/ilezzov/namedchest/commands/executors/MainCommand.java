@@ -149,9 +149,11 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         final Response response = api.checkBlock(block);
 
         if (Main.isSupportWorldGuard()) {
-            if (!api.isPlayerInRegion(player, block.getLocation())) {
-                player.sendMessage(PluginMessages.commandNotOwnedRegion(commandPlaceholders));
-                return true;
+            if (!PermissionsChecker.hasPermission(sender, Permission.IGNORE_REGIONS)) {
+                if (!api.isPlayerInRegion(player, block.getLocation())) {
+                    player.sendMessage(PluginMessages.commandNotOwnedRegion(commandPlaceholders));
+                    return true;
+                }
             }
         }
 
@@ -251,9 +253,11 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         final Response response = api.checkBlock(block);
 
         if (Main.isSupportWorldGuard()) {
-            if (!api.isPlayerInRegion(player, block.getLocation())) {
-                player.sendMessage(PluginMessages.commandNotOwnedRegion(commandPlaceholders));
-                return true;
+            if (!PermissionsChecker.hasPermission(sender, Permission.IGNORE_REGIONS)) {
+                if (!api.isPlayerInRegion(player, block.getLocation())) {
+                    player.sendMessage(PluginMessages.commandNotOwnedRegion(commandPlaceholders));
+                    return true;
+                }
             }
         }
 

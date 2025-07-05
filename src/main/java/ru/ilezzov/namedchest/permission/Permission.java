@@ -10,7 +10,8 @@ public enum Permission {
     NAME_SET("namedchest.name.set"),
     NAME_SET_COLOR("namedchest.name.set.color"),
     NAME_CLEAR("namedchest.name.clear"),
-    NAME_MAX_LENGTH("namedchest.name.max.length");
+    NAME_MAX_LENGTH("namedchest.name.max.length"),
+    IGNORE_REGIONS("namedchest.ignore_regions");
 
 
     private final String permission;
