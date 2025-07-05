@@ -30,6 +30,7 @@
 ## <a id="features">Features</a>
 
 * **[🔥] Hologram display on cursor hover** → [more details](#cursor-hover)
+* **[🆕] Supporting WorldGuard**
 * Support for 2 languages (Russian, English) + the ability to create your own translation
 * Support for 11 blocks → [more details](#supporting-blocks)
 * Configuration of maximum distance to the block
@@ -148,15 +149,16 @@ config_version: 1.2
 
 ## <a id="permissions">All plugin permissions</a>
 
-| Право                      | Описание                                    |
-|----------------------------|---------------------------------------------|
-| namedchest.*               | Access to all plugin features               |
-| namedchest.reload          | Access to reload the plugin /nc reload      |
-| namedchest.no_cooldown     | Disable cooldown for any feature            |
-| namedchest.name.set        | Access to the /nc set command               |
-| namedchest.name.set.color  | Allow setting colored names                 |
-| namedchest.name.clear      | Access to the /nc clear command             |
-| namedchest.name.max.length | Remove maximum length restriction for names |
+| Право                      | Описание                                           |
+|----------------------------|----------------------------------------------------|
+| namedchest.*               | Access to all plugin features                      |
+| namedchest.reload          | Access to reload the plugin /nc reload             |
+| namedchest.no_cooldown     | Disable cooldown for any feature                   |
+| namedchest.name.set        | Access to the /nc set command                      |
+| namedchest.name.set.color  | Allow setting colored names                        |
+| namedchest.name.clear      | Access to the /nc clear command                    |
+| namedchest.name.max.length | Remove maximum length restriction for names        |
+| namedchest.ignore_regions  | Access to set names in other regions of WorldGuard |
 
 ## <a id="cursor-hover">Hologram display on cursor hover 🔥</a>
 
