@@ -16,7 +16,7 @@ public class PlayerBlockBreakEvent implements Listener {
     @EventHandler
     public void onBlockBreakEvent(final BlockBreakEvent event) {
         final Block block = event.getBlock();
-        final Response response = api.checkBlock(block);
+        final Response response = api.checkBlock(block, false);
 
         if (response.status() != Status.ACCESS) {
             return;

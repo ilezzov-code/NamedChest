@@ -7,7 +7,7 @@ import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 
 public interface NamedChestAPI {
-    Response checkBlock(final Block block);
+    Response checkBlock(final Block block, final boolean checkDisplayName);
 
     void setName(final Component name, final Container container);
 

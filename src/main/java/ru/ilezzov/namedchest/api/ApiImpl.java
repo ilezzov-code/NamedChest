@@ -20,7 +20,7 @@ import ru.ilezzov.namedchest.Main;
 
 public class ApiImpl implements NamedChestAPI{
     @Override
-    public Response checkBlock(final Block block) {
+    public Response checkBlock(final Block block, final boolean checkDisplayName) {
         if (block == null) {
             return new Response(Status.NULL_BLOCK, null);
         }
@@ -35,8 +35,10 @@ public class ApiImpl implements NamedChestAPI{
             return new Response(Status.INVALUABLE_BLOCK, null);
         }
 
-        if (container.customName() == null) {
-            return new Response(Status.NULL_DISPLAY_NAME, null);
+        if (checkDisplayName) {
+            if (container.customName() == null) {
+                return new Response(Status.NULL_DISPLAY_NAME, null);
+            }
         }
 
         return new Response(Status.ACCESS, container);

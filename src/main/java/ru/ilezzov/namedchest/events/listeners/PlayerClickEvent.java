@@ -61,7 +61,7 @@ public class PlayerClickEvent implements Listener {
         }
 
         final Block block = event.getClickedBlock();
-        final Response response = api.checkBlock(block);
+        final Response response = api.checkBlock(block, false);
 
         if (Main.isSupportWorldGuard()) {
             if (!PermissionsChecker.hasPermission(player, Permission.IGNORE_REGIONS)) {

@@ -58,7 +58,7 @@ public class BlockHoverManager {
         return Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             for (final Player player : Bukkit.getOnlinePlayers()) {
                 final Block block = player.getTargetBlock(maxDistance);
-                final Response response = api.checkBlock(block);
+                final Response response = api.checkBlock(block, false);
 
                 if (response.status() != Status.ACCESS) {
                     continue;

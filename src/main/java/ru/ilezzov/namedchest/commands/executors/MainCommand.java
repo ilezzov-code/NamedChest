@@ -146,7 +146,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         }
 
         final Block block = player.getTargetBlock(maxDistance);
-        final Response response = api.checkBlock(block);
+        final Response response = api.checkBlock(block, false);
 
         if (Main.isSupportWorldGuard()) {
             if (!PermissionsChecker.hasPermission(sender, Permission.IGNORE_REGIONS)) {
@@ -159,7 +159,6 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 
         switch (response.status()) {
             case NULL_BLOCK -> sender.sendMessage(PluginMessages.commandNameBlockNull(commandPlaceholders));
-            case INVALUABLE_BLOCK -> sender.sendMessage(PluginMessages.commandNameBlockError(commandPlaceholders));
             case ACCESS -> {
                 final String textName = getTextName(args);
 
@@ -250,7 +249,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         }
 
         final Block block = player.getTargetBlock(maxDistance);
-        final Response response = api.checkBlock(block);
+        final Response response = api.checkBlock(block, true);
 
         if (Main.isSupportWorldGuard()) {
             if (!PermissionsChecker.hasPermission(sender, Permission.IGNORE_REGIONS)) {
