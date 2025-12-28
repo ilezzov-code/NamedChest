@@ -148,18 +148,19 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         final Block block = player.getTargetBlock(maxDistance);
         final Response response = api.checkBlock(block, false);
 
-        if (Main.isSupportWorldGuard()) {
-            if (!PermissionsChecker.hasPermission(sender, Permission.IGNORE_REGIONS)) {
-                if (!api.isPlayerInRegion(player, block.getLocation())) {
-                    player.sendMessage(PluginMessages.commandNotOwnedRegion(commandPlaceholders));
-                    return true;
-                }
-            }
-        }
-
         switch (response.status()) {
             case NULL_BLOCK -> sender.sendMessage(PluginMessages.commandNameBlockNull(commandPlaceholders));
+            case INVALUABLE_BLOCK -> sender.sendMessage(PluginMessages.commandNameBlockError(commandPlaceholders));
             case ACCESS -> {
+                if (Main.isSupportWorldGuard()) {
+                    if (!PermissionsChecker.hasPermission(sender, Permission.IGNORE_REGIONS)) {
+                        if (!api.isPlayerInRegion(player, block.getLocation())) {
+                            player.sendMessage(PluginMessages.commandNotOwnedRegion(commandPlaceholders));
+                            return true;
+                        }
+                    }
+                }
+
                 final String textName = getTextName(args);
 
                 if (textName == null) {
@@ -251,20 +252,20 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         final Block block = player.getTargetBlock(maxDistance);
         final Response response = api.checkBlock(block, true);
 
-        if (Main.isSupportWorldGuard()) {
-            if (!PermissionsChecker.hasPermission(sender, Permission.IGNORE_REGIONS)) {
-                if (!api.isPlayerInRegion(player, block.getLocation())) {
-                    player.sendMessage(PluginMessages.commandNotOwnedRegion(commandPlaceholders));
-                    return true;
-                }
-            }
-        }
-
         switch (response.status()) {
             case NULL_BLOCK -> sender.sendMessage(PluginMessages.commandNameBlockNull(commandPlaceholders));
             case INVALUABLE_BLOCK -> sender.sendMessage(PluginMessages.commandNameBlockError(commandPlaceholders));
             case NULL_DISPLAY_NAME -> sender.sendMessage(PluginMessages.commandNameAlreadyClear(commandPlaceholders));
             case ACCESS -> {
+                if (Main.isSupportWorldGuard()) {
+                    if (!PermissionsChecker.hasPermission(sender, Permission.IGNORE_REGIONS)) {
+                        if (!api.isPlayerInRegion(player, block.getLocation())) {
+                            player.sendMessage(PluginMessages.commandNotOwnedRegion(commandPlaceholders));
+                            return true;
+                        }
+                    }
+                }
+
                 api.removeName((Container) response.data());
                 Main.getBlockHoverManager().kill(block.getLocation());
 

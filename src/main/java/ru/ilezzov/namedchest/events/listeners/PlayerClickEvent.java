@@ -63,6 +63,10 @@ public class PlayerClickEvent implements Listener {
         final Block block = event.getClickedBlock();
         final Response response = api.checkBlock(block, false);
 
+        if (response.status() != Status.ACCESS) {
+            return;
+        }
+
         if (Main.isSupportWorldGuard()) {
             if (!PermissionsChecker.hasPermission(player, Permission.IGNORE_REGIONS)) {
                 if (!api.isPlayerInRegion(player, block.getLocation())) {
@@ -70,10 +74,6 @@ public class PlayerClickEvent implements Listener {
                     return;
                 }
             }
-        }
-
-        if (response.status() != Status.ACCESS) {
-            return;
         }
 
         event.setCancelled(true);
