@@ -1,15 +1,17 @@
-name: ${project.artifactId}
-description: Hologram names for your storage facilities
-version: ${project.version}
-main: ru.ilezzov.namedchest.Main
-api-version: '1.18'
-prefix: NamedChest
+name: $pluginName
+description: $pluginDescription
+prefix: $pluginName
+version: '${pluginVersion}'
+
+main: $pluginMainClass
+api-version: '${pluginApiVersion}'
 load: STARTUP
-authors: [ ILeZzoV ]
-website: https://t.me/ilezovofficial
+
+authors: [ $pluginAuthor ]
+website: $pluginWebsite
+
 commands:
-  namedchest:
-    aliases: [ nc ]
-    usage: nc [help|set|remove|reload]
-softdepend:
-  - WorldGuard
+  $pluginMainCommand:
+    description: Main plugin command
+    aliases:
+      - nc

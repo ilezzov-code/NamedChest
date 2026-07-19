@@ -3,41 +3,34 @@
 # LEGACY_ADVANCED — Цвет и HEX через &##rrggbb / §##rrggbb
 # MINI_MESSAGE — Цвет через <цвет> Подробнее — https://docs.advntr.dev/minimessage/index.html
 # И все форматы доступные на https://www.birdflop.com/resources/rgb/
-# Вы можете использовать все форматы одновременно в одном сообщении. Плагин это поддерживает
 
-Plugin:
-  plugin-prefix: "&6NamedChest &8|" # Префикс плагина. Используйте {P} в сообщениях
-  plugin-reload: "{P} &7Плагин успешно &aперезагружен"
-  plugin-has-error-reload: "{P} &7Возникла ошибка при перезагрузке плагина: &c{ERROR}"
-  plugin-use-latest-version: "{P} &7Вы используете &aпоследнюю &7версию плагина: &6{LATEST_VERS}"
-  plugin-use-outdated-version: "{P} &7Вы используете устаревшую версию: &c{OUTDATED_VERS} \n&7Рекомендуем установить последнюю версию плагина: &6{LATEST_VERS} \n&7Скачать: <click:open_url:{DOWNLOAD_LINK}>&e{DOWNLOAD_LINK}"
-  plugin-has-error: "{P} &7Возникла ошибка при выполнении команды O_o → &c{ERROR}"
-  plugin-has-error-check-version: "{P} &7Не удалось получить последнюю версию плагина. Проверьте подключение к интернету"
+# MINI_MESSAGE (РЕКОМЕНДУЕТСЯ) — цвет через <цвет> Подробнее — https://docs.advntr.dev/minimessage/index.html
+# ALL — поддержка всех форматов одновременно. Медленнее, поддерживаются не все теги MINI_MESSAGE
+colorizer: MINI_MESSAGE
 
-Messages:
-  command-permission-error: "{P} &cУ вас нет прав для выполнения этой команды O_o"
-  command-no-console-error: "{P} &cЭта команда доступна только для игроков!"
-  command-cooldown: "{P} &7Подождите еще &6{TIME} &7сек. перед выполнением этой команды"
-  command-disable: "{P} &7Эта команда отключена администратором сервера"
-  command-not-owned-region: "{P} &7Вы находитесь не в своем регионе"
+plugin:
+  # Префикс плагина для обычных сообщений. Используйте {P} в сообщениях
+  prefix: "<gold>NamedChest</gold> <dark_gray>|</dark_gray>"
+  # Префикс плагина для сообщений об ошибке. Используйте {P_E} в сообщения
+  prefix-error: "<red>NamedChest</red> <dark_gray>|</dark_gray>"
+  reload: "{P} <gray>Плагин успешно <green>перезагружен</gray>"
+  no-console: "{P_E} <red>Команда доступна только игрокам</red>"
+  no-perms: "{P_E} <red>У вас нет прав на использования этой команды</red>"
+  command-disable: "{P_E} <red>Команда отключена администратором сервера</red>"
+  cooldown: "{P} <gray>Подождите еще <yellow>{COOLDOWN} сек.</yellow> для использования этой команды"
 
-  command-main-message: "{P} &7Помощь по командам плагина: \n\n
-      &e/nc &7— отправить это сообщение \n
-      &e/nc set <name> &7— установить имя \n
-      &e/nc clear &7— очистить имя \n 
-      &e/nc version &7— узнать актуальную версию плагина \n
-      &e/nc reload &7— перезагрузить плагин \n\n
-    &7Разработчик: &6{DEVELOPER} \n
-    &7Связаться: <click:open_url:{CONTACT_LINK}>&e{CONTACT_LINK}"
+version:
+  latest: "{P} <gray>Вы используете последнюю версию плагина <green>{CURRENT_VERSION}</green></gray>"
+  supported: "{P} <gray>Вы используете поддерживаемую версию плагина (<yellow>{CURRENT_VERSION}</yellow>), однако рекомендуем обновить ее до последней версии (<green>{LATEST_VERSION}</green>)"
+  outdated: "{P} <gray>Вы используете не поддерживаемую версию плагина (<red>{CURRENT_VERSION}). <bold>НЕ РЕКОМЕНДУЕМ ИСПОЛЬЗОВАТЬ ЭТОТ ПАТЧ</bold></red> Срочно установите последнюю версию плагина (<green>{LATEST_VERSION}</green>)"
+  blacklist: "{P} <gray>Вы используете заблокированную версию плагина (<red>{CURRENT_VERSION}). <bold>НЕ РЕКОМЕНДУЕМ ИСПОЛЬЗОВАТЬ ЭТОТ ПАТЧ.</bold></red> Срочно установите последнюю версию плагина (<green>{LATEST_VERSION}</green>)"
+  download: "{P} Скачать — <yellow><click:open_url:{DOWNLOAD_LINK}>{DOWNLOAD_LINK}</click></yellow>"
+  error: "{P_E} <red>Возникла ошибка при получении версии плагина. Подробнее в консоли</red>"
+  loading: "{P} <gray>Загружаю последнюю версию плагина...</gray>"
 
-  command-name-set: "{P} &7Вы успешно установили имя &6{NAME} &r&7на блок &6{BLOCK}"
-  command-name-clear: "{P} &7Вы успешно очистили имя блока &6{BLOCK}"
-  command-name-empty: "{P} &7Имя не может быть пустым"
-  command-name-max-length: "{P} &7Имя не должно превышать длину в &6{MAX_LENGTH} &7символов"
-  command-name-block-null: "{P} &7Блок не может быть воздухом"
-  command-name-block-error: "{P} &7Невозможно установить имя на этот блок O_o"
-  command-name-use-anvil-error: "{P} &7Вы не можете переименовать этот блок при помощи наковальни"
-  command-name-already-clear: "{P} &7У этого блока нет имени"
-
-# Не редактируйте это
-config_version: ${project.version}
+main-command:
+  help: |
+    {P} <gray>Помощь по командам плагина: 
+     <yellow>• <click:suggest_command:/$command reload>/$command reload</click></yellow> — перезагрузить плагин
+     <yellow>• <click:suggest_command:/$command version>/$command version</click></yellow> — получить последнюю версию плагина
+    Написать разработчику — <blue><click:open_url:{CONTACT}>{CONTACT}</click></gray>

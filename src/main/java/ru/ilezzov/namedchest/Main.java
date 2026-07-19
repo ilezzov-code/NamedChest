@@ -1,212 +1,264 @@
 package ru.ilezzov.namedchest;
 
-import com.sk89q.worldguard.WorldGuard;
+import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
+import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
 import lombok.Getter;
-import lombok.Setter;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import ru.ilezzov.namedchest.api.ApiImpl;
-import ru.ilezzov.namedchest.api.NamedChestAPI;
-import ru.ilezzov.namedchest.events.EventManager;
-import ru.ilezzov.namedchest.file.PluginFile;
-import ru.ilezzov.namedchest.logging.Logger;
-import ru.ilezzov.namedchest.logging.PaperLogger;
-import ru.ilezzov.namedchest.managers.BlockHoverManager;
-import ru.ilezzov.namedchest.managers.BlockTypeManager;
-import ru.ilezzov.namedchest.managers.VersionManager;
-import ru.ilezzov.namedchest.messages.ConsoleMessages;
-import ru.ilezzov.namedchest.settings.PluginSettings;
-import ru.ilezzov.namedchest.stats.PluginStats;
-import ru.ilezzov.namedchest.utils.ListUtils;
+import ru.ilezzov.namedchest.command.CommandManager;
+import ru.ilezzov.namedchest.event.EventManager;
+import ru.ilezzov.namedchest.file.ConfigFile;
+import ru.ilezzov.namedchest.file.MessageFile;
+import ru.ilezzov.namedchest.logger.ConsoleMessage;
+import ru.ilezzov.namedchest.logger.PluginLogger;
+import ru.ilezzov.namedchest.message.MessageManager;
+import ru.ilezzov.namedchest.version.VersionControl;
+import ru.ilezzov.namedchest.version.VersionData;
+import ru.ilezzov.namedchest.version.VersionManager;
+import ru.ilezzov.namedchest.version.VersionType;
 
-import java.io.IOException;
-import java.io.Serial;
-import java.net.URISyntaxException;
-import java.util.List;
+import java.io.File;
 
-import static ru.ilezzov.namedchest.commands.CommandManager.loadCommands;
-import static ru.ilezzov.namedchest.messages.ConsoleMessages.*;
+import static ru.ilezzov.namedchest.BuildConfig.*;
 
 public final class Main extends JavaPlugin {
-    // API
     @Getter
-    private static NamedChestAPI api;
+    private PluginLogger pluginLogger;
 
     @Getter
-    private static Logger pluginLogger;
-    @Getter
-    private static Main instance;
-
-    // Settings
-    @Getter
-    private static PluginSettings pluginSettings;
-
-    // Plugin info
-    @Getter
-    private static String prefix;
-    @Getter
-    private static String pluginVersion;
-    @Getter
-    private static String pluginContactLink;
-    @Getter
-    private static List<String> pluginDevelopers;
-    @Getter
-    private static boolean outdatedVersion;
-    @Getter
-    private static String messageLanguage;
-    @Getter
-    @Setter
-    private static boolean supportWorldGuard = false;
-
-    // Files
-    @Getter
-    private static PluginFile configFile;
-    @Getter
-    private static PluginFile messagesFile;
-
-    // Managers
-    @Getter
-    private static VersionManager versionManager;
-    @Getter
-    private static BlockTypeManager blockTypeManager;
-    @Getter
-    private static BlockHoverManager blockHoverManager;
-
-    // Events
-    @Getter
-    private static EventManager eventManager;
+    private ConsoleMessage consoleMessage;
 
     @Getter
-    private static WorldGuard worldGuard;
+    private ConfigFile configFile;
+    @Getter
+    private MessageFile messageFile;
+
+    @Getter
+    private MessageManager messageManager;
+    @Getter
+    private VersionManager versionManager;
+    @Getter
+    private VersionControl versionControl;
+
+    @Getter
+    private EventManager eventManager;
+
+    @Getter
+    private Metrics metrics;
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
-        pluginLogger = new PaperLogger(this);
-        instance = this;
-        api = loadApi();
+        this.pluginLogger = new PluginLogger(this);
+        this.consoleMessage = new ConsoleMessage("messages");
 
-        // Load files
-        loadSettings();
-        loadFiles();
+        this.configFile = this.loadConfig();
+        if (configFile.debug) {
+            this.pluginLogger.setDebug(true);
+            this.pluginLogger.debug(this.consoleMessage.getMessage("debug.enabled"));
+        }
 
-        // Load plugin info
-        loadPluginInfo();
+        final String messageFileName = this.configFile.language.concat(".yml");
 
-        // Check plugin version
-        checkPluginVersion();
+        this.messageFile = loadMessageFile(messageFileName);
+        this.messageManager = new MessageManager(this);
 
-        // Load WorldGuard
-        loadWorldGuard();
+        this.pluginLogger.debug(this.consoleMessage.getMessage("file.message.loaded", messageFileName));
 
-        // Load managers
-        loadManagers();
+        this.versionManager = new VersionManager(this.pluginLogger, this.consoleMessage);
+        this.versionManager.loadVersionData();
 
-        // Load commands and events
-        loadCommands();
-        loadEvents();
+        if (this.configFile.versionControl.checkOnStartup) {
+            if (!this.checkVersion()) {
+                this.stop();
+                return;
+            }
+        }
 
-        // Load Metrics
-        loadMetrics();
+        this.versionControl = new VersionControl(this);
+        this.versionControl.startBackgroundCheckTask();
+        this.versionControl.startCriticalNotifyTask();
 
-        // Send enable message
-        sendEnableMessage();
+        this.eventManager = new EventManager(this);
+        eventManager.registerEvents();
 
+        new CommandManager(this).loadCommands();
+
+        this.loadMetrics();
+        this.sendEnableMessage();
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
-        if (blockHoverManager != null) {
-            blockHoverManager.stopTask();
-            blockHoverManager.killAll();
+        if (this.versionControl != null) {
+            versionControl.stop();
         }
+
+        if (this.eventManager != null) {
+            eventManager.unregisterEvents();
+        }
+
+        this.sendDisableMessage();
     }
 
-    public static void checkPluginVersion() {
-        if (configFile.getBoolean("check_updates")) {
-            try {
-                versionManager = new VersionManager(pluginVersion, pluginSettings.getUrlToFileVersion());
+    public void stop() {
+        Bukkit.getPluginManager().disablePlugin(this);
+    }
 
-                if (versionManager.check()) {
-                    pluginLogger.info(latestPluginVersion(pluginVersion));
-                    outdatedVersion = false;
-                } else {
-                    pluginLogger.info(legacyPluginVersion(pluginVersion, versionManager.getCurrentPluginVersion(), pluginSettings.getUrlToDownloadLatestVersion()));
-                    outdatedVersion = true;
-                }
-            } catch (URISyntaxException e) {
-                pluginLogger.info(errorOccurred("Invalid link to the GitHub file. link = ".concat(versionManager.getUrlToFileVersion())));
-            } catch (IOException | InterruptedException e ) {
-                pluginLogger.info(errorOccurred("Couldn't send a request to get the plugin version"));
+    public void reloadMessageFile(final String oldFile, final String file) {
+        if (oldFile.equalsIgnoreCase(file)) {
+            this.messageFile.load();
+            return;
+        }
+
+        this.messageFile = loadMessageFile(file.concat(".yml"));
+    }
+
+    private ConfigFile loadConfig() {
+        return (ConfigFile) ConfigManager.create(ConfigFile.class)
+                .configure(opt -> {
+                    opt.configurer(new YamlBukkitConfigurer(), new SerdesBukkit());
+                    opt.bindFile(new File(this.getDataFolder(), "config.yml"));
+                    opt.removeOrphans(true);
+                })
+                .saveDefaults()
+                .load(true);
+    }
+
+    private MessageFile loadMessageFile(final String file) {
+        final File messageDir = new File(this.getDataFolder(), "messages");
+        final File messageFile = new File(messageDir, file);
+
+        if (!messageFile.exists()) {
+            messageFile.getParentFile().mkdirs();
+            this.saveResource("messages/".concat(file), false);
+        }
+
+        return (MessageFile) ConfigManager.create(MessageFile.class)
+                .configure(opt -> {
+                    opt.configurer(new YamlBukkitConfigurer());
+                    opt.bindFile(messageFile);
+                    opt.removeOrphans(true);
+                })
+                .saveDefaults()
+                .load(true);
+    }
+
+    private boolean checkVersion() {
+        final VersionData versionData = this.versionManager.getVersionData();
+
+        if (versionData == null) {
+            return true;
+        }
+
+        final VersionType versionType = this.versionManager.getVersionType();
+        final String latestVersion = versionData.getLatest().getVersion();
+        final String latestDownloadLink = versionData.getLatest().getDownloadUrl();
+
+        return switch (versionType) {
+            case LATEST -> {
+                this.pluginLogger.info(
+                        this.consoleMessage.getMessage("version.message.latest", PLUGIN_VERSION)
+                );
+                yield true;
             }
-        }
-    }
-
-
-    public static void loadWorldGuard() {
-        final boolean supportWorldGuard = configFile.getBoolean("support_worldguard");
-
-        if (!supportWorldGuard) {
-            return;
-        }
-
-        final Plugin worldGuardPlugin = Bukkit.getPluginManager().getPlugin("WorldGuard");
-
-        if (worldGuardPlugin == null) {
-            return;
-        }
-
-        worldGuard = WorldGuard.getInstance();
-        setSupportWorldGuard(true);
-        pluginLogger.info(ConsoleMessages.supportedWorldGuard());
-    }
-
-    private void loadSettings() {
-        try {
-            pluginSettings = new PluginSettings();
-        } catch (IOException e) {
-            pluginLogger.info(errorOccurred(e.getMessage()));
-        }
-    }
-
-    public static void loadFiles() {
-        configFile = new PluginFile(Main.getInstance(), "config.yml");
-        messageLanguage = configFile.getString("language");
-        messagesFile = new PluginFile(Main.getInstance(), "messages/".concat(messageLanguage).concat(".yml"));
-    }
-
-    public static NamedChestAPI loadApi() {
-        return new ApiImpl();
-    }
-
-    private void loadEvents() {
-        eventManager = new EventManager(this);
-        eventManager.loadEvents();
-    }
-
-    private void loadPluginInfo() {
-        prefix = getMessagesFile().getString("Plugin.plugin-prefix");
-        pluginVersion = this.getDescription().getVersion();
-        pluginDevelopers = this.getDescription().getAuthors();
-        pluginContactLink = this.getDescription().getWebsite();
-    }
-
-    public static void reloadPluginInfo() {
-        prefix = getMessagesFile().getString("Plugin.plugin-prefix");
-    }
-
-    private void loadManagers() {
-        blockTypeManager = new BlockTypeManager();
-        blockHoverManager = new BlockHoverManager();
+            case SUPPORTED -> {
+                this.pluginLogger.warn(
+                        this.consoleMessage.getMessage("version.message.supported", PLUGIN_VERSION, latestVersion)
+                );
+                this.pluginLogger.warn(
+                        this.consoleMessage.getMessage("version.message.download", latestDownloadLink)
+                );
+                yield true;
+            }
+            case OUTDATED -> {
+                this.pluginLogger.error(
+                        this.consoleMessage.getMessage("version.message.outdated", PLUGIN_VERSION, this.consoleMessage.getMessage("version.message.action.impossible_launch"), latestVersion)
+                );
+                this.pluginLogger.error(
+                        this.consoleMessage.getMessage("version.message.download", latestDownloadLink)
+                );
+                yield false;
+            }
+            case BLACKLIST -> {
+                this.pluginLogger.error(
+                        this.consoleMessage.getMessage("version.message.blacklist", PLUGIN_VERSION, this.consoleMessage.getMessage("version.message.action.impossible_launch"), latestVersion)
+                );
+                this.pluginLogger.error(
+                        this.consoleMessage.getMessage("version.message.download", latestDownloadLink)
+                );
+                yield false;
+            }
+            case UNREACHABLE -> true;
+        };
     }
 
     private void loadMetrics() {
-        new PluginStats(this);
+        this.metrics = new Metrics(this, BuildConfig.BSTATS_ID);
+        this.metrics.addCustomChart(
+                new SimplePie(BSTATS_LANGUAGE_CHART_ID, () -> this.configFile.language)
+        );
     }
 
     private void sendEnableMessage() {
-        pluginLogger.info(pluginEnable(ListUtils.listToString(getPluginDevelopers()), getPluginVersion(), getPluginContactLink()));
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.1")
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.2", NAME, PLUGIN_VERSION)
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.3")
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.4", String.join(", ", this.getDescription().getAuthors()))
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.5", WEBSITE)
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.6", this.configFile.language)
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.7")
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.8", ISSUE_URL)
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.9")
+        );
+    }
+
+    private void sendDisableMessage() {
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.1")
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.disable.banner.2", NAME, PLUGIN_VERSION)
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.3")
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.4", String.join(", ", this.getDescription().getAuthors()))
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.5", WEBSITE)
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.6", this.configFile.language)
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.7")
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.8", ISSUE_URL)
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.9")
+        );
     }
 }
