@@ -17,6 +17,11 @@ public class PluginLogger {
         this.console = plugin.getComponentLogger();
     }
 
+    public PluginLogger(final Plugin plugin, final boolean debug) {
+        this.console = plugin.getComponentLogger();
+        this.debug = debug;
+    }
+
     public void info(final String text) {
         console.info(
                 LegacySerialize.serialize(text)

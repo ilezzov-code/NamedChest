@@ -58,7 +58,9 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.pluginLogger = new PluginLogger(this);
+        final boolean isDebug = Boolean.getBoolean("ilezzov.debug");
+
+        this.pluginLogger = new PluginLogger(this, isDebug);
         this.consoleMessage = new ConsoleMessage("messages");
 
         this.configFile = this.loadConfig();
