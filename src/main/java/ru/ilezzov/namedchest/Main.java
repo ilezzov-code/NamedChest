@@ -1,5 +1,6 @@
 package ru.ilezzov.namedchest;
 
+import com.sk89q.worldguard.WorldGuard;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.ilezzov.namedchest.command.CommandManager;
 import ru.ilezzov.namedchest.event.EventManager;
@@ -49,6 +51,11 @@ public final class Main extends JavaPlugin {
     @Getter
     private Metrics metrics;
 
+    @Getter
+    private WorldGuard worldGuard;
+    @Getter
+    private boolean supportWorldGuard = false;
+
     @Override
     public void onEnable() {
         this.pluginLogger = new PluginLogger(this);
@@ -87,6 +94,8 @@ public final class Main extends JavaPlugin {
         new CommandManager(this).loadCommands();
 
         this.loadMetrics();
+        this.loadWorldGuard();
+
         this.sendEnableMessage();
     }
 
@@ -213,6 +222,15 @@ public final class Main extends JavaPlugin {
                 this.consoleMessage.getMessage("plugin.enable.banner.3")
         );
         this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.worldguard", supportWorldGuard ?
+                        this.consoleMessage.getMessage("worldguard.status.enable") :
+                        this.consoleMessage.getMessage("worldguard.status.disable"))
+        );
+        sendFooter();
+    }
+
+    private void sendFooter() {
+        this.pluginLogger.info(
                 this.consoleMessage.getMessage("plugin.enable.banner.4", String.join(", ", this.getDescription().getAuthors()))
         );
         this.pluginLogger.info(
@@ -232,6 +250,21 @@ public final class Main extends JavaPlugin {
         );
     }
 
+    private void loadWorldGuard() {
+        if (!this.configFile.supportWorldGuard) {
+            return;
+        }
+
+        final Plugin plugin = Bukkit.getPluginManager().getPlugin("WorldGuard");
+
+        if (plugin == null) {
+            return;
+        }
+
+        this.worldGuard = WorldGuard.getInstance();
+        this.supportWorldGuard = true;
+    }
+
     private void sendDisableMessage() {
         this.pluginLogger.info(
                 this.consoleMessage.getMessage("plugin.enable.banner.1")
@@ -242,23 +275,6 @@ public final class Main extends JavaPlugin {
         this.pluginLogger.info(
                 this.consoleMessage.getMessage("plugin.enable.banner.3")
         );
-        this.pluginLogger.info(
-                this.consoleMessage.getMessage("plugin.enable.banner.4", String.join(", ", this.getDescription().getAuthors()))
-        );
-        this.pluginLogger.info(
-                this.consoleMessage.getMessage("plugin.enable.banner.5", WEBSITE)
-        );
-        this.pluginLogger.info(
-                this.consoleMessage.getMessage("plugin.enable.banner.6", this.configFile.language)
-        );
-        this.pluginLogger.info(
-                this.consoleMessage.getMessage("plugin.enable.banner.7")
-        );
-        this.pluginLogger.info(
-                this.consoleMessage.getMessage("plugin.enable.banner.8", ISSUE_URL)
-        );
-        this.pluginLogger.info(
-                this.consoleMessage.getMessage("plugin.enable.banner.9")
-        );
+        sendFooter();
     }
 }

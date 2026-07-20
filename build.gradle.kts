@@ -11,6 +11,7 @@ repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.okaeri.cloud/releases")
+    maven("https://maven.enginehub.org/repo/")
 }
 
 dependencies {
@@ -23,6 +24,8 @@ dependencies {
     implementation("eu.okaeri:okaeri-configs-serdes-bukkit:6.1.0-beta.4")
 
     implementation("org.bstats:bstats-bukkit:3.2.1");
+
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
 }
 
 java {
