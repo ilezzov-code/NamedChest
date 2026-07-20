@@ -56,7 +56,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                 this.message().plugin.prefix, this.message().plugin.prefixError
         );
 
-        placeholder.addPlaceholder("{CONTACT}", BuildConfig.WEBSITE);
+        placeholder.addPlaceholder("{CONTACT}", BuildConfig.ISSUE_URL);
 
         if (args.length == 0) {
             handleHelp(sender, placeholder);
