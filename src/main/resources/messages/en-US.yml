@@ -31,6 +31,18 @@ version:
 main-command:
   help: |
     {P} <gray>Plugin command help: 
+     <yellow>• <click:suggest_command:/$command set>/$command version</click></yellow> — set a name
+     <yellow>• <click:suggest_command:/$command clear>/$command version</click></yellow> — clear a name
      <yellow>• <click:suggest_command:/$command reload>/$command reload</click></yellow> — reload the plugin
-     <yellow>• <click:suggest_command:/$command version>/$command version</click></yellow> — get the latest plugin version
+     <yellow>• <click:suggest_command:/$command version>/$command version</click></yellow> — get the latest plugin version 
     Contact the developer — <blue><click:open_url:{CONTACT}>{CONTACT}</click></gray>
+  set: "{P} <gray>You have successfully set the name '<yellow>{NAME}</yellow>' on block <yellow>{BLOCK}</yellow></gray>"
+  clear: "{P} <gray>You have successfully cleared the name of block <yellow>{BLOCK}</yellow></gray>"
+  error:
+    not-your-region: "{P_E} <red>You are not in your region</red>"
+    exceeded-name-length: "{P_E} <red>The name must be no longer than <yellow>{MAX_LENGTH}</yellow> characters</red>"
+    empty-name: "{P_E} <red>The name cannot be empty</red>"
+    null-block: "{P_E} <red>The block cannot be air</red>"
+    unsupported-block: "{P_E} <red>Unsupported block. Use supported blocks:</red> <yellow>{SUPPORTED_BLOCKS}</yellow>"
+    cancel-anvil: "{P_E} <red>You cannot rename this block using anvil</red>"
+    already-clear: "{P_E} <red>There is no name for this block</red>"

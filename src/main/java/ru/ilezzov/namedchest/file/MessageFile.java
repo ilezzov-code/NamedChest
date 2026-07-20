@@ -78,9 +78,37 @@ public class MessageFile extends OkaeriConfig {
     public static class MainCommandSubConfig extends OkaeriConfig {
         public String help = """
                 {P} <gray>Plugin command help:
+                 <yellow>• <click:suggest_command:/$command set>/$command version</click></yellow> — set a name
+                 <yellow>• <click:suggest_command:/$command clear>/$command version</click></yellow> — clear a name
                  <yellow>• <click:suggest_command:/$command reload>/$command reload</click></yellow> — reload the plugin
-                 <yellow>• <click:suggest_command:/$command version>/$command version</click></yellow> — get the latest plugin version
+                 <yellow>• <click:suggest_command:/$command version>/$command version</click></yellow> — get the latest plugin version\s
                 Contact the developer — <blue><click:open_url:{CONTACT}>{CONTACT}</click></gray>
                 """;
+        public String set = "{P} <gray>You have successfully set the name '<yellow>{NAME}</yellow>' on block <yellow>{BLOCK}</yellow></gray>";
+        public String clear = "{P} <gray>You have successfully cleared the name of block <yellow>{BLOCK}</yellow></gray>";
+        public ErrorSection error = new ErrorSection();
+
+        public static class ErrorSection extends OkaeriConfig {
+            @CustomKey("not-your-region")
+            public String notYourRegion = "{P_E} <red>You are not in your region</red>";
+
+            @CustomKey("exceeded-name-length")
+            public String exceededNameLength = "{P_E} <red>The name must be no longer than <yellow>{MAX_LENGTH}</yellow> characters</red>";
+
+            @CustomKey("empty-name")
+            public String emptyName = "{P_E} <red>The name cannot be empty</red>";
+
+            @CustomKey("null-block")
+            public String nullBlock = "{P_E} <red>The block cannot be air</red>";
+
+            @CustomKey("unsupported-block")
+            public String unsupportedBlock = "{P_E} <red>Unsupported block. Use supported blocks:</red> <yellow>{SUPPORTED_BLOCKS}</yellow>";
+
+            @CustomKey("cancel-anvil")
+            public String cancelAnvil = "{P_E} <red>You cannot rename this block using anvil</red>";
+
+            @CustomKey("already-clear")
+            public String alreadyClear = "{P_E} <red>There is no name for this block</red>";
+        }
     }
 }

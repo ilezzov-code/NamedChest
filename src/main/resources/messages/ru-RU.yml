@@ -30,7 +30,19 @@ version:
 
 main-command:
   help: |
-    {P} <gray>Помощь по командам плагина: 
+    {P} <gray>Plugin command help: 
+     <yellow>• <click:suggest_command:/$command set>/$command version</click></yellow> — установить имя
+     <yellow>• <click:suggest_command:/$command clear>/$command version</click></yellow> — очистить имя
      <yellow>• <click:suggest_command:/$command reload>/$command reload</click></yellow> — перезагрузить плагин
      <yellow>• <click:suggest_command:/$command version>/$command version</click></yellow> — получить последнюю версию плагина
     Написать разработчику — <blue><click:open_url:{CONTACT}>{CONTACT}</click></gray>
+  set: "{P} <gray>Вы успешно установили имя '<yellow>{NAME}</yellow>' на блок <yellow>{BLOCK}</yellow></gray>"
+  clear: "{p} <gray>Вы успешно очистили имя у блока <yellow>{BLOCK}</yellow></gray>"
+  error:
+    not-your-region: "{P_E} <red>Вы находитесь в чужом регионе</red>"
+    exceeded-name-length: "{P_E} <red>Имя не должно быть длиннее <yellow>{MAX_LENGTH}</yellow> символов</red>"
+    empty-name: "{P_E} <red>Имя не может быть пустым</red>"
+    null-block: "{P_E} <red>Блок не может быть воздухом</red>"
+    unsupported-block: "{P_E} <red>Неподдерживаемый блок. Поддерживаемые блоки:</red> <yellow>{SUPPORTED_BLOCKS}</yellow>"
+    cancel-anvil: "{P_E} <red>Вы не можете изменить имя у этого блока при помощи наковальни</red>"
+    already-clear: "{P_E} <red>Имя уже очищено или не установлено</red>"
