@@ -4,18 +4,20 @@ import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.CustomKey;
 import eu.okaeri.configs.annotation.Header;
+import org.bukkit.Material;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 
 // Header generator: https://fsymbols.com/ru/generatory/
 @Header({
-        "██████╗░██╗░░░░░██╗░░░██╗░██████╗░██╗███╗░░██╗████████╗███████╗███╗░░░███╗██████╗░██╗░░░░░░█████╗░████████╗███████╗",
-        "██╔══██╗██║░░░░░██║░░░██║██╔════╝░██║████╗░██║╚══██╔══╝██╔════╝████╗░████║██╔══██╗██║░░░░░██╔══██╗╚══██╔══╝██╔════╝",
-        "██████╔╝██║░░░░░██║░░░██║██║░░██╗░██║██╔██╗██║░░░██║░░░█████╗░░██╔████╔██║██████╔╝██║░░░░░███████║░░░██║░░░█████╗░░",
-        "██╔═══╝░██║░░░░░██║░░░██║██║░░╚██╗██║██║╚████║░░░██║░░░██╔══╝░░██║╚██╔╝██║██╔═══╝░██║░░░░░██╔══██║░░░██║░░░██╔══╝░░",
-        "██║░░░░░███████╗╚██████╔╝╚██████╔╝██║██║░╚███║░░░██║░░░███████╗██║░╚═╝░██║██║░░░░░███████╗██║░░██║░░░██║░░░███████╗",
-        "╚═╝░░░░░╚══════╝░╚═════╝░░╚═════╝░╚═╝╚═╝░░╚══╝░░░╚═╝░░░╚══════╝╚═╝░░░░░╚═╝╚═╝░░░░░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░╚══════╝",
+        "███╗░░██╗░█████╗░███╗░░░███╗███████╗██████╗░░░░█████╗░██╗░░██╗███████╗░██████╗████████╗",
+        "████╗░██║██╔══██╗████╗░████║██╔════╝██╔══██╗░░██╔══██╗██║░░██║██╔════╝██╔════╝╚══██╔══╝",
+        "██╔██╗██║███████║██╔████╔██║█████╗░░██║░░██║░░██║░░╚═╝███████║█████╗░░╚█████╗░░░░██║░░░",
+        "██║╚████║██╔══██║██║╚██╔╝██║██╔══╝░░██║░░██║░░██║░░██╗██╔══██║██╔══╝░░░╚═══██╗░░░██║░░░",
+        "██║░╚███║██║░░██║██║░╚═╝░██║███████╗██████╔╝░░╚█████╔╝██║░░██║███████╗██████╔╝░░░██║░░░",
+        "╚═╝░░╚══╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝╚═════╝░░░░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░░░░╚═╝░░░",
         "",
         "Developer / Разработчик: ILeZzoV",
         "More plugins / Больше плагинов: https://t.me/ilezzov_plugins",
@@ -116,6 +118,84 @@ public class ConfigFile extends OkaeriConfig {
         })
         @CustomKey("critical-notify-interval")
         public Interval criticalNotifyInterval = new Interval(true, TimeUnit.MINUTES, 10);
+    }
+
+    @Comment({
+            "",
+            "Enable / Disable the option to name a block | Включить / Отключить возможность давать имя блоку",
+            "Supporting blocks / Поддерживаемые блоки: CHEST (сундук), TRAPPED_CHEST (сундук-ловушка),",
+            "BARREL (бочка), FURNACE (печка), SMOKER (коптильня), BLAST_FURNACE (плавильня), HOPPER (воронка),",
+            "DISPENSER (раздатчик), DROPPER (выбрасыватель), BREWING_STAND (варочная стойка), SHULKER_BOX (шалкер бокс)"
+    })
+    @CustomKey("supported-blocks")
+    public Set<Material> supportedBlocks = Set.of(
+            Material.CHEST, Material.TRAPPED_CHEST, Material.BARREL, Material.FURNACE,
+            Material.SMOKER, Material.BLAST_FURNACE, Material.HOPPER, Material.DISPENSER,
+            Material.DROPPER, Material.BREWING_STAND, Material.SHULKER_BOX
+    );
+
+    @Comment({
+            "",
+            "Maximum distance to the block / Максимальная дистанция до блока"
+    })
+    @CustomKey("max-distance")
+    public int maxDistance = 5;
+
+    @Comment({
+            "",
+            "Enable supporting WorldGuard / Включить поддержку WorldGuard",
+            "WorldGuard is a Minecraft plugin — https://github.com/EngineHub/WorldGuard"
+    })
+    @CustomKey("support-worldguard")
+    public boolean supportWorldGuard = true;
+
+    @Comment({
+            "",
+            "Item's name settings / Настройки имени блока"
+    })
+    @CustomKey("name-settings")
+    public NameSettings nameSettings = new NameSettings();
+
+    public static class NameSettings extends OkaeriConfig {
+        @Comment("Enable support color name / Включить поддержку цветных имен")
+        @CustomKey("support-color")
+        public boolean supportColor = true;
+
+        @Comment("Max name length / Максимальная длинна имени")
+        @CustomKey("max-length")
+        public int maxLength = 25;
+
+        @Comment("Save the name when the block is destroyed / Сохранять имя при разрушении блока")
+        @CustomKey("save-when-breaking")
+        public boolean saveWhenBreaking = false;
+
+        @Comment("Forbid giving a name through an anvil / Запретить давать имя через наковальню")
+        @CustomKey("cancel-anvil")
+        public boolean cancelAnvil = true;
+
+        @Comment("Support for spaces in the name / Поддержка пробелов в имени")
+        @CustomKey("support-spaces")
+        public boolean supportSpaces = true;
+    }
+
+    @Comment({
+            "",
+            "Command settings / Настройки команд"
+    })
+    @CustomKey("command-settings")
+    public CommandSettings commandSettings = new CommandSettings();
+
+    public static class CommandSettings extends OkaeriConfig {
+        @Comment("Enable command /nc set | Включить команду /nc set")
+        @CustomKey("enable-set")
+        public boolean enableSet = true;
+
+        @Comment("Enable command /nc clear | Включить команду /nc clear")
+        @CustomKey("enable-clear")
+        public boolean enableClear = true;
+
+        @Comment("Cooldown in using commands in seconds | Задержка на использование команд в секундах")
+        public int cooldown;
     }
 
     @Comment("")
