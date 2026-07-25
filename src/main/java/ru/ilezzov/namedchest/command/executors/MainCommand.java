@@ -1,14 +1,23 @@
 package ru.ilezzov.namedchest.command.executors;
 
+import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Container;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.ilezzov.namedchest.BuildConfig;
 import ru.ilezzov.namedchest.Main;
+import ru.ilezzov.namedchest.color.LegacySerialize;
+import ru.ilezzov.namedchest.cooldown.CooldownManager;
+import ru.ilezzov.namedchest.cooldown.CooldownResponse;
 import ru.ilezzov.namedchest.file.ConfigFile;
 import ru.ilezzov.namedchest.file.MessageFile;
 import ru.ilezzov.namedchest.logger.ConsoleMessage;
@@ -17,6 +26,7 @@ import ru.ilezzov.namedchest.message.MessageManager;
 import ru.ilezzov.namedchest.permission.PermissionManager;
 import ru.ilezzov.namedchest.permission.Permissions;
 import ru.ilezzov.namedchest.placeholder.PluginPlaceholder;
+import ru.ilezzov.namedchest.utils.Utils;
 import ru.ilezzov.namedchest.version.VersionControl;
 import ru.ilezzov.namedchest.version.VersionData;
 import ru.ilezzov.namedchest.version.VersionManager;
@@ -27,6 +37,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class MainCommand implements CommandExecutor, TabExecutor {
     private final Main plugin;
@@ -35,10 +46,13 @@ public class MainCommand implements CommandExecutor, TabExecutor {
     private final MessageManager messageManager;
     private final ConfigFile configFile;
     private final ConsoleMessage consoleMessage;
+    private final CooldownManager cooldownManager;
 
     private static final Map<String, String> ROOT_COMMANDS = Map.of(
             "reload", Permissions.RELOAD,
-            "version", Permissions.VERSION_COMMAND
+            "version", Permissions.VERSION_COMMAND,
+            "set", Permissions.SET_COMMAND,
+            "clear", Permissions.CLEAR_COMMAND
     );
 
     public MainCommand(final Main plugin) {
@@ -48,6 +62,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         this.messageManager = plugin.getMessageManager();
         this.configFile = plugin.getConfigFile();
         this.consoleMessage = plugin.getConsoleMessage();
+        this.cooldownManager = new CooldownManager();
     }
 
     @Override
@@ -66,6 +81,8 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         switch (args[0].toLowerCase()) {
             case "version" -> handleVersion(sender);
             case "reload" -> handleReload(sender, placeholder);
+            case "set" -> handleSet(sender, args, placeholder);
+            case "clear" -> handleClear(sender, placeholder);
             default -> handleHelp(sender, placeholder);
         }
 
@@ -185,6 +202,251 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         this.messageManager.send(
                 sender, this.message().plugin.reload, placeholder
         );
+    }
+
+    public void handleSet(final CommandSender sender, final String[] args, final PluginPlaceholder placeholder) {
+        if (!this.configFile.commandSettings.enableSet) {
+            this.messageManager.send(
+                    sender, this.message().plugin.commandDisable, placeholder
+            );
+            return;
+        }
+
+        if (!(sender instanceof Player player)) {
+            this.messageManager.send(
+                    sender, this.message().plugin.noConsole, placeholder
+            );
+            return;
+        }
+
+        if (!PermissionManager.hasPermission(sender, Permissions.SET_COMMAND, Permissions.COLOR_NAME)) {
+            this.messageManager.send(
+                    sender, this.message().plugin.noPerms, placeholder
+            );
+            return;
+        }
+
+        if (!PermissionManager.hasPermission(sender, Permissions.NO_COOLDOWN)) {
+            final CooldownResponse response = this.cooldownManager.getCooldown(player.getUniqueId());
+
+            if (response.hasCooldown()) {
+                placeholder.addPlaceholder("{COOLDOWN}", TimeUnit.MILLISECONDS.toSeconds(response.remaining()));
+                this.messageManager.send(
+                        sender, this.message().plugin.cooldown, placeholder
+                );
+                return;
+            }
+        }
+
+        final MessageFile.MainCommandSubConfig commandSubConfig = this.message().mainCommand;
+        if (args.length < 2) {
+            this.messageManager.send(
+                    sender, commandSubConfig.error.emptyName, placeholder
+            );
+            return;
+        }
+
+        final Block block = Utils.getTargetBlock(
+                player, this.configFile.maxDistance, this.configFile.ignoredBlocks
+        );
+
+        if (block == null) {
+            this.messageManager.send(
+                    sender, commandSubConfig.error.nullBlock, placeholder
+            );
+            return;
+        }
+
+        final Material material = block.getType();
+        if (!this.configFile.supportedBlocks.contains(material)) {
+            final String stringMaterials = Utils.getMaterialsString(this.configFile.supportedBlocks);
+
+            placeholder.addPlaceholder("{SUPPORTED_BLOCKS}", stringMaterials);
+            this.messageManager.send(
+                    sender, commandSubConfig.error.unsupportedBlock, placeholder
+            );
+            return;
+        }
+
+        final BlockState state = block.getState();
+
+        if (!(state instanceof Container container)) {
+            final String stringMaterials = Utils.getMaterialsString(this.configFile.supportedBlocks);
+
+            placeholder.addPlaceholder("{SUPPORTED_BLOCKS}", stringMaterials);
+            this.messageManager.send(
+                    sender, commandSubConfig.error.unsupportedBlock, placeholder
+            );
+            return;
+        }
+
+        if (this.plugin.isSupportWorldGuard()) {
+            if (!PermissionManager.hasPermission(sender, Permissions.IGNORE_REGIONS)) {
+                if (!Utils.canModify(player, block.getLocation(), this.plugin.getWorldGuard())) {
+                    this.messageManager.send(
+                            sender, commandSubConfig.error.notYourRegion, placeholder
+                    );
+                    return;
+                }
+            }
+        }
+
+        final String textName = this.getTextName(args);
+        final String serializedName = LegacySerialize.serializeToString(textName);
+        Component name = LegacySerialize.serializeFromString(serializedName);
+        final String nameWithoutColors = LegacySerialize.serializeWithoutColors(name);
+
+        if (nameWithoutColors.isBlank()) {
+            this.messageManager.send(
+                    sender, commandSubConfig.error.emptyName, placeholder
+            );
+            return;
+        }
+
+        if (!PermissionManager.hasPermission(sender, Permissions.IGNORE_MAX_LENGTH)) {
+            if (nameWithoutColors.length() > this.configFile.nameSettings.maxLength) {
+                placeholder.addPlaceholder("{MAX_LENGTH}", this.configFile.nameSettings.maxLength);
+                this.messageManager.send(
+                        sender, commandSubConfig.error.exceededNameLength, placeholder
+                );
+                return;
+            }
+        }
+
+        placeholder.addPlaceholder("{NAME}", serializedName);
+        if (!this.configFile.nameSettings.supportColor) {
+            name = Component.text(nameWithoutColors);
+            placeholder.addPlaceholder("{NAME}", nameWithoutColors);
+        }
+
+        if (!PermissionManager.hasPermission(sender, Permissions.COLOR_NAME)) {
+            name = Component.text(nameWithoutColors);
+            placeholder.addPlaceholder("{NAME}", nameWithoutColors);
+        }
+
+        Utils.setContainerName(container, name);
+        placeholder.addPlaceholder("{BLOCK}", Utils.getMaterialLang(material));
+
+        this.messageManager.send(
+                sender, commandSubConfig.set, placeholder
+        );
+        this.cooldownManager.newCooldown(player.getUniqueId(), TimeUnit.SECONDS.toMillis(
+                this.configFile.commandSettings.cooldown
+        ));
+    }
+
+    public void handleClear(final CommandSender sender, final PluginPlaceholder placeholder) {
+        if (!this.configFile.commandSettings.enableSet) {
+            this.messageManager.send(
+                    sender, this.message().plugin.commandDisable, placeholder
+            );
+            return;
+        }
+
+        if (!(sender instanceof Player player)) {
+            this.messageManager.send(
+                    sender, this.message().plugin.noConsole, placeholder
+            );
+            return;
+        }
+
+        if (!PermissionManager.hasPermission(sender, Permissions.CLEAR_COMMAND)) {
+            this.messageManager.send(
+                    sender, this.message().plugin.noPerms, placeholder
+            );
+            return;
+        }
+
+        if (!PermissionManager.hasPermission(sender, Permissions.NO_COOLDOWN)) {
+            final CooldownResponse response = this.cooldownManager.getCooldown(player.getUniqueId());
+
+            if (response.hasCooldown()) {
+                placeholder.addPlaceholder("{COOLDOWN}", TimeUnit.MILLISECONDS.toSeconds(response.remaining()));
+                this.messageManager.send(
+                        sender, this.message().plugin.cooldown, placeholder
+                );
+                return;
+            }
+        }
+
+        final MessageFile.MainCommandSubConfig commandSubConfig = this.message().mainCommand;
+        final Block block = Utils.getTargetBlock(
+                player, this.configFile.maxDistance, this.configFile.ignoredBlocks
+        );
+
+        if (block == null) {
+            this.messageManager.send(
+                    sender, commandSubConfig.error.nullBlock, placeholder
+            );
+            return;
+        }
+
+        final Material material = block.getType();
+        if (!this.configFile.supportedBlocks.contains(material)) {
+            final String stringMaterials = Utils.getMaterialsString(this.configFile.supportedBlocks);
+
+            placeholder.addPlaceholder("{SUPPORTED_BLOCKS}", stringMaterials);
+            this.messageManager.send(
+                    sender, commandSubConfig.error.unsupportedBlock, placeholder
+            );
+            return;
+        }
+
+        final BlockState state = block.getState();
+
+        if (!(state instanceof Container container)) {
+            final String stringMaterials = Utils.getMaterialsString(this.configFile.supportedBlocks);
+
+            placeholder.addPlaceholder("{SUPPORTED_BLOCKS}", stringMaterials);
+            this.messageManager.send(
+                    sender, commandSubConfig.error.unsupportedBlock, placeholder
+            );
+            return;
+        }
+
+        if (this.plugin.isSupportWorldGuard()) {
+            if (!PermissionManager.hasPermission(sender, Permissions.IGNORE_REGIONS)) {
+                if (!Utils.canModify(player, block.getLocation(), this.plugin.getWorldGuard())) {
+                    this.messageManager.send(
+                            sender, commandSubConfig.error.notYourRegion, placeholder
+                    );
+                    return;
+                }
+            }
+        }
+
+        final Component name = container.customName();
+
+        if (name == null) {
+            this.messageManager.send(
+                    sender, commandSubConfig.error.alreadyClear, placeholder
+            );
+            return;
+        }
+
+        Utils.clearContainerName(container);
+        placeholder.addPlaceholder("{BLOCK}", Utils.getMaterialLang(material));
+
+        this.messageManager.send(
+                sender, commandSubConfig.clear, placeholder
+        );
+        this.cooldownManager.newCooldown(player.getUniqueId(), TimeUnit.SECONDS.toMillis(
+                this.configFile.commandSettings.cooldown
+        ));
+    }
+
+    private String getTextName(final String[] args) {
+        final String firstWorld = args[1];
+
+        if (firstWorld == null || firstWorld.isBlank()) {
+            return null;
+        }
+
+        if (!this.configFile.nameSettings.supportSpaces) {
+            return firstWorld;
+        }
+
+        return String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length));
     }
 
     private MessageFile message() {
