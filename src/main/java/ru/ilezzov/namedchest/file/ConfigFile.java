@@ -192,6 +192,10 @@ public class ConfigFile extends OkaeriConfig {
         @Comment("Support for spaces in the name / Поддержка пробелов в имени")
         @CustomKey("support-spaces")
         public boolean supportSpaces = true;
+
+        @Comment("Giving names through a name tag / Давать имена через бирку")
+        @CustomKey("support-name-tag")
+        public boolean supportNameTag = true;
     }
 
     @Comment({

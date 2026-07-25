@@ -5,6 +5,8 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import ru.ilezzov.namedchest.Main;
 import ru.ilezzov.namedchest.event.listeners.PlayerJoinEvent;
+import ru.ilezzov.namedchest.event.listeners.PlayerUseAnvilEvent;
+import ru.ilezzov.namedchest.event.listeners.PlayerUseNameTagEvent;
 import ru.ilezzov.namedchest.file.ConfigFile;
 import ru.ilezzov.namedchest.logger.ConsoleMessage;
 import ru.ilezzov.namedchest.logger.PluginLogger;
@@ -82,7 +84,14 @@ public class EventManager {
     private Map<Listener, Boolean> loadListeners() {
         return Map.ofEntries(
                 Map.entry(new PlayerJoinEvent(plugin),
-                        this.configFile.versionControl.notifyAdminsOnJoin)
+                        this.configFile.versionControl.notifyAdminsOnJoin
+                ),
+                Map.entry(new PlayerUseAnvilEvent(plugin),
+                        this.configFile.nameSettings.cancelAnvil
+                ),
+                Map.entry(new PlayerUseNameTagEvent(plugin),
+                    this.configFile.nameSettings.supportNameTag
+                )
         );
     }
 }
