@@ -32,10 +32,7 @@ import ru.ilezzov.namedchest.version.VersionData;
 import ru.ilezzov.namedchest.version.VersionManager;
 import ru.ilezzov.namedchest.version.VersionType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -62,7 +59,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         this.messageManager = plugin.getMessageManager();
         this.configFile = plugin.getConfigFile();
         this.consoleMessage = plugin.getConsoleMessage();
-        this.cooldownManager = new CooldownManager();
+        this.cooldownManager = plugin.getNameCooldownManager();
     }
 
     @Override
@@ -291,7 +288,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             }
         }
 
-        final String textName = this.getTextName(args);
+        final String textName = Utils.getTextNameFromList(Arrays.copyOfRange(args, 1, args.length), this.configFile.nameSettings.supportSpaces);
         final String serializedName = LegacySerialize.serializeToString(textName);
         Component name = LegacySerialize.serializeFromString(serializedName);
         final String nameWithoutColors = LegacySerialize.serializeWithoutColors(name);
@@ -433,20 +430,6 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         this.cooldownManager.newCooldown(player.getUniqueId(), TimeUnit.SECONDS.toMillis(
                 this.configFile.commandSettings.cooldown
         ));
-    }
-
-    private String getTextName(final String[] args) {
-        final String firstWorld = args[1];
-
-        if (firstWorld == null || firstWorld.isBlank()) {
-            return null;
-        }
-
-        if (!this.configFile.nameSettings.supportSpaces) {
-            return firstWorld;
-        }
-
-        return String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length));
     }
 
     private MessageFile message() {

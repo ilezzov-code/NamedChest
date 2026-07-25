@@ -60,4 +60,18 @@ public class Utils {
 
         return null;
     }
+
+    public static String getTextNameFromList(final String[] args, final boolean supportSpaces) {
+        final String firstWorld = args[0];
+
+        if (firstWorld == null || firstWorld.isBlank()) {
+            return null;
+        }
+
+        if (!supportSpaces) {
+            return firstWorld;
+        }
+
+        return String.join(" ", args);
+    }
 }

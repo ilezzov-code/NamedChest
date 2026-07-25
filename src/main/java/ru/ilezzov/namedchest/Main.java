@@ -14,6 +14,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.ilezzov.namedchest.color.Colorizer;
 import ru.ilezzov.namedchest.command.CommandManager;
+import ru.ilezzov.namedchest.cooldown.CooldownManager;
 import ru.ilezzov.namedchest.event.EventManager;
 import ru.ilezzov.namedchest.file.ConfigFile;
 import ru.ilezzov.namedchest.file.MessageFile;
@@ -65,6 +66,10 @@ public final class Main extends JavaPlugin {
     private WorldGuard worldGuard;
     @Getter
     private boolean supportWorldGuard = false;
+
+    // Cooldown
+    @Getter
+    private final CooldownManager nameCooldownManager = new CooldownManager();
 
     @Override
     public void onEnable() {
