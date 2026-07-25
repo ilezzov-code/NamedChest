@@ -78,8 +78,8 @@ public class MessageFile extends OkaeriConfig {
     public static class MainCommandSubConfig extends OkaeriConfig {
         public String help = """
                 {P} <gray>Plugin command help:
-                 <yellow>• <click:suggest_command:/$command set>/$command version</click></yellow> — set a name
-                 <yellow>• <click:suggest_command:/$command clear>/$command version</click></yellow> — clear a name
+                 <yellow>• <click:suggest_command:/$command set>/$command set</click></yellow> — set a name
+                 <yellow>• <click:suggest_command:/$command clear>/$command clear</click></yellow> — clear a name
                  <yellow>• <click:suggest_command:/$command reload>/$command reload</click></yellow> — reload the plugin
                  <yellow>• <click:suggest_command:/$command version>/$command version</click></yellow> — get the latest plugin version\s
                 Contact the developer — <blue><click:open_url:{CONTACT}>{CONTACT}</click></gray>

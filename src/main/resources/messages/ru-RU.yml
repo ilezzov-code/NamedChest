@@ -31,8 +31,8 @@ version:
 main-command:
   help: |
     {P} <gray>Plugin command help: 
-     <yellow>• <click:suggest_command:/$command set>/$command version</click></yellow> — установить имя
-     <yellow>• <click:suggest_command:/$command clear>/$command version</click></yellow> — очистить имя
+     <yellow>• <click:suggest_command:/$command set>/$command set</click></yellow> — установить имя
+     <yellow>• <click:suggest_command:/$command clear>/$command clear</click></yellow> — очистить имя
      <yellow>• <click:suggest_command:/$command reload>/$command reload</click></yellow> — перезагрузить плагин
      <yellow>• <click:suggest_command:/$command version>/$command version</click></yellow> — получить последнюю версию плагина
     Написать разработчику — <blue><click:open_url:{CONTACT}>{CONTACT}</click></gray>
