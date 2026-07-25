@@ -6,6 +6,7 @@ import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
 import lombok.Getter;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimpleBarChart;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -33,6 +34,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static ru.ilezzov.namedchest.BuildConfig.*;
@@ -570,6 +572,11 @@ public final class Main extends JavaPlugin {
         this.metrics = new Metrics(this, BuildConfig.BSTATS_ID);
         this.metrics.addCustomChart(
                 new SimplePie(BSTATS_LANGUAGE_CHART_ID, () -> this.configFile.language)
+        );
+        this.metrics.addCustomChart(
+                new SimpleBarChart("soft_depend", () -> Map.of(
+                        "WorldGuard", this.supportWorldGuard ? 1 : 0)
+                )
         );
     }
 
