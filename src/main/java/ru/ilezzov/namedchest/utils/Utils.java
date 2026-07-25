@@ -8,6 +8,7 @@ import com.sk89q.worldguard.protection.regions.RegionQuery;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 
@@ -49,5 +50,14 @@ public class Utils {
         return regionQuery.testState(
                 BukkitAdapter.adapt(location), WorldGuardPlugin.inst().wrapPlayer(player), Flags.BUILD
         );
+    }
+
+    public static Block getTargetBlock(final Player player, final int maxDistance, final Set<Material> ignoredBlocks) {
+        final Block targetBlock = player.getTargetBlock(ignoredBlocks, maxDistance);
+        if (!targetBlock.getType().isAir()) {
+            return targetBlock;
+        }
+
+        return null;
     }
 }
