@@ -102,9 +102,8 @@ public final class Main extends JavaPlugin {
         this.pluginLogger.debug(this.consoleMessage.getMessage("file.message.loaded", messageFileName));
 
         this.versionManager = new VersionManager(this.pluginLogger, this.consoleMessage);
-        this.versionManager.loadVersionData();
-
         if (this.configFile.versionControl.checkOnStartup) {
+            this.versionManager.loadVersionData();
             if (!this.checkVersion()) {
                 this.stop();
                 return;
