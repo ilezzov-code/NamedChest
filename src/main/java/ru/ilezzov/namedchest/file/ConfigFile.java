@@ -122,7 +122,7 @@ public class ConfigFile extends OkaeriConfig {
 
     @Comment({
             "",
-            "Enable / Disable the option to name a block | Включить / Отключить возможность давать имя блоку",
+            "Blocks that can be named / Блоки, которым можно будет дать имя",
             "Supporting blocks / Поддерживаемые блоки: CHEST (сундук), TRAPPED_CHEST (сундук-ловушка),",
             "BARREL (бочка), FURNACE (печка), SMOKER (коптильня), BLAST_FURNACE (плавильня), HOPPER (воронка),",
             "DISPENSER (раздатчик), DROPPER (выбрасыватель), BREWING_STAND (варочная стойка), SHULKER_BOX (шалкер бокс)"
@@ -132,6 +132,22 @@ public class ConfigFile extends OkaeriConfig {
             Material.CHEST, Material.TRAPPED_CHEST, Material.BARREL, Material.FURNACE,
             Material.SMOKER, Material.BLAST_FURNACE, Material.HOPPER, Material.DISPENSER,
             Material.DROPPER, Material.BREWING_STAND, Material.SHULKER_BOX
+    );
+
+    @Comment({
+            "",
+            "Список блоков, сквозь которые будет проходить взгляд (RayTrace)",
+            "A list of blocks that the view will pass through (RayTrace)",
+            "",
+            "Air / Воздух: AIR, CAVE_AIR, VOID_AIR",
+            "Grass(seagrass) / Трава(морская трава): GRASS, TALL_GRASS, SEAGRASS, TALL_SEAGRASS",
+            "Fern and vine / Папоротник и лиана: FERN, LARGE_FERN, VINE",
+    })
+    @CustomKey("ignored-blocks")
+    public Set<Material> ignoredBlocks = Set.of(
+            Material.AIR, Material.CAVE_AIR, Material.VOID_AIR,
+            Material.GRASS, Material.TALL_GRASS, Material.SEAGRASS, Material.TALL_SEAGRASS,
+            Material.FERN, Material.LARGE_FERN, Material.VINE, Material.LIGHT, Material.STRUCTURE_VOID
     );
 
     @Comment({
@@ -195,7 +211,7 @@ public class ConfigFile extends OkaeriConfig {
         public boolean enableClear = true;
 
         @Comment("Cooldown in using commands in seconds | Задержка на использование команд в секундах")
-        public int cooldown;
+        public int cooldown = 5;
     }
 
     @Comment("")
