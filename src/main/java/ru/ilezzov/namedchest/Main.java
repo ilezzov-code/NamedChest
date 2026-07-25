@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ru.ilezzov.namedchest.color.Colorizer;
 import ru.ilezzov.namedchest.command.CommandManager;
 import ru.ilezzov.namedchest.cooldown.CooldownManager;
+import ru.ilezzov.namedchest.display.manager.HologramManager;
 import ru.ilezzov.namedchest.event.EventManager;
 import ru.ilezzov.namedchest.file.ConfigFile;
 import ru.ilezzov.namedchest.file.MessageFile;
@@ -73,6 +74,8 @@ public final class Main extends JavaPlugin {
     @Getter
     private final CooldownManager nameCooldownManager = new CooldownManager();
 
+    private HologramManager hologramManager;
+
     @Override
     public void onEnable() {
         final boolean isDebug = Boolean.getBoolean("ilezzov.debug");
@@ -126,6 +129,9 @@ public final class Main extends JavaPlugin {
 
         new CommandManager(this).loadCommands();
 
+        this.hologramManager = new HologramManager(this);
+        this.hologramManager.start();
+
         this.loadMetrics();
         this.loadWorldGuard();
 
@@ -140,6 +146,11 @@ public final class Main extends JavaPlugin {
 
         if (this.eventManager != null) {
             eventManager.unregisterEvents();
+        }
+
+        if (this.hologramManager != null) {
+            this.hologramManager.killAll();
+            this.hologramManager.stop();
         }
 
         this.sendDisableMessage();

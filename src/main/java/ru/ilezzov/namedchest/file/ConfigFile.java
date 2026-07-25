@@ -6,6 +6,7 @@ import eu.okaeri.configs.annotation.CustomKey;
 import eu.okaeri.configs.annotation.Header;
 import org.bukkit.Material;
 
+import java.util.EnumSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -128,7 +129,7 @@ public class ConfigFile extends OkaeriConfig {
             "DISPENSER (раздатчик), DROPPER (выбрасыватель), BREWING_STAND (варочная стойка), SHULKER_BOX (шалкер бокс)"
     })
     @CustomKey("supported-blocks")
-    public Set<Material> supportedBlocks = Set.of(
+    public Set<Material> supportedBlocks = EnumSet.of(
             Material.CHEST, Material.TRAPPED_CHEST, Material.BARREL, Material.FURNACE,
             Material.SMOKER, Material.BLAST_FURNACE, Material.HOPPER, Material.DISPENSER,
             Material.DROPPER, Material.BREWING_STAND, Material.SHULKER_BOX
@@ -144,7 +145,7 @@ public class ConfigFile extends OkaeriConfig {
             "Fern and vine / Папоротник и лиана: FERN, LARGE_FERN, VINE",
     })
     @CustomKey("ignored-blocks")
-    public Set<Material> ignoredBlocks = Set.of(
+    public Set<Material> ignoredBlocks = EnumSet.of(
             Material.AIR, Material.CAVE_AIR, Material.VOID_AIR,
             Material.GRASS, Material.TALL_GRASS, Material.SEAGRASS, Material.TALL_SEAGRASS,
             Material.FERN, Material.LARGE_FERN, Material.VINE, Material.LIGHT, Material.STRUCTURE_VOID
