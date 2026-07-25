@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import ru.ilezzov.namedchest.Main;
+import ru.ilezzov.namedchest.event.listeners.PlayerBlockBreakEvent;
 import ru.ilezzov.namedchest.event.listeners.PlayerJoinEvent;
 import ru.ilezzov.namedchest.event.listeners.PlayerUseAnvilEvent;
 import ru.ilezzov.namedchest.event.listeners.PlayerUseNameTagEvent;
@@ -91,6 +92,9 @@ public class EventManager {
                 ),
                 Map.entry(new PlayerUseNameTagEvent(plugin),
                     this.configFile.nameSettings.supportNameTag
+                ),
+                Map.entry(new PlayerBlockBreakEvent(configFile),
+                        !this.configFile.nameSettings.saveWhenBreaking
                 )
         );
     }
