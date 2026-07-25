@@ -2,6 +2,7 @@ package ru.ilezzov.namedchest.color;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -34,6 +35,18 @@ public class LegacySerialize {
             return "";
         }
         return legacySerialize(message);
+    }
+
+    public static Component serializeFromString(final String message) {
+        if (message == null) {
+            return Component.empty();
+        }
+
+        return MiniMessage.miniMessage().deserialize(message);
+    }
+
+    public static String serializeWithoutColors(final Component component) {
+        return PlainTextComponentSerializer.plainText().serialize(component);
     }
 
     private static String legacySerialize(final String message) {
