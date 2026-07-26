@@ -81,7 +81,7 @@ public class MessageFile extends OkaeriConfig {
                  <yellow>• <click:suggest_command:/$command set>/$command set</click></yellow> — set a name
                  <yellow>• <click:suggest_command:/$command clear>/$command clear</click></yellow> — clear a name
                  <yellow>• <click:suggest_command:/$command reload>/$command reload</click></yellow> — reload the plugin
-                 <yellow>• <click:suggest_command:/$command version>/$command version</click></yellow> — get the latest plugin version\s
+                 <yellow>• <click:suggest_command:/$command version>/$command version</click></yellow> — get the latest plugin version
                 Contact the developer — <blue><click:open_url:{CONTACT}>{CONTACT}</click></gray>
                 """;
         public String set = "{P} <gray>You have successfully set the name '<yellow>{NAME}</yellow>' on block <yellow>{BLOCK}</yellow></gray>";

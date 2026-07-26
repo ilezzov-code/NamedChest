@@ -3,6 +3,7 @@ package ru.ilezzov.namedchest.display.hologram;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.EquipmentSlot;
@@ -22,7 +23,7 @@ public class ArmorStandHologram extends MyHologram {
         }
 
         final World world = playerLocation.getWorld();
-        this.entity = world.spawn(this.createHologramLocation(playerLocation), ArmorStand.class, armorStand -> {
+        this.entity = world.spawn(this.createHologramLocation(playerLocation, 0.2), ArmorStand.class, armorStand -> {
             armorStand.customName(this.name);
             armorStand.setCustomNameVisible(true);
 

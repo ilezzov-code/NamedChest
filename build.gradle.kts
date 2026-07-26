@@ -12,6 +12,7 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.okaeri.cloud/releases")
     maven("https://maven.enginehub.org/repo/")
+    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
@@ -26,6 +27,8 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.2.1");
 
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
+
+    compileOnly("com.github.DecentSoftware-eu:DecentHolograms:2.8.5")
 }
 
 java {

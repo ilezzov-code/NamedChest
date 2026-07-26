@@ -58,23 +58,26 @@ public final class Main extends JavaPlugin {
     private VersionManager versionManager;
     @Getter
     private VersionControl versionControl;
-
     @Getter
     private EventManager eventManager;
 
-    @Getter
-    private Metrics metrics;
+    private HologramManager hologramManager;
 
     @Getter
     private WorldGuard worldGuard;
     @Getter
     private boolean supportWorldGuard = false;
 
-    // Cooldown
+    @Getter
+    private boolean supportDecentHolograms = false;
+
+    // Cooldowns
     @Getter
     private final CooldownManager nameCooldownManager = new CooldownManager();
 
-    private HologramManager hologramManager;
+    // Metrics
+    @Getter
+    private Metrics metrics;
 
     @Override
     public void onEnable() {
@@ -129,11 +132,13 @@ public final class Main extends JavaPlugin {
 
         new CommandManager(this).loadCommands();
 
+        this.loadWorldGuard();
+        this.loadDecentHolograms();
+
         this.hologramManager = new HologramManager(this);
         this.hologramManager.start();
 
         this.loadMetrics();
-        this.loadWorldGuard();
 
         this.sendEnableMessage();
     }
@@ -599,17 +604,25 @@ public final class Main extends JavaPlugin {
                 this.consoleMessage.getMessage("plugin.enable.banner.2", NAME, PLUGIN_VERSION)
         );
         this.pluginLogger.info(
-                this.consoleMessage.getMessage("plugin.enable.banner.3")
+                this.consoleMessage.getMessage("plugin.enable.banner.line")
         );
         this.pluginLogger.info(
-                this.consoleMessage.getMessage("plugin.enable.banner.worldguard", supportWorldGuard ?
-                        this.consoleMessage.getMessage("worldguard.status.enable") :
-                        this.consoleMessage.getMessage("worldguard.status.disable"))
+                this.consoleMessage.getMessage("plugin.enable.banner.depend", "WorldGuard", supportWorldGuard ?
+                        this.consoleMessage.getMessage("depend.status.enable") :
+                        this.consoleMessage.getMessage("depend.status.disable"))
+        );
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.depend", "DecentHolograms", supportDecentHolograms ?
+                        this.consoleMessage.getMessage("depend.status.enable") :
+                        this.consoleMessage.getMessage("depend.status.disable"))
         );
         sendFooter();
     }
 
     private void sendFooter() {
+        this.pluginLogger.info(
+                this.consoleMessage.getMessage("plugin.enable.banner.line")
+        );
         this.pluginLogger.info(
                 this.consoleMessage.getMessage("plugin.enable.banner.4", String.join(", ", this.getDescription().getAuthors()))
         );
@@ -620,7 +633,7 @@ public final class Main extends JavaPlugin {
                 this.consoleMessage.getMessage("plugin.enable.banner.6", this.configFile.language)
         );
         this.pluginLogger.info(
-                this.consoleMessage.getMessage("plugin.enable.banner.7")
+                this.consoleMessage.getMessage("plugin.enable.banner.line")
         );
         this.pluginLogger.info(
                 this.consoleMessage.getMessage("plugin.enable.banner.8", ISSUE_URL)
@@ -645,6 +658,16 @@ public final class Main extends JavaPlugin {
         this.supportWorldGuard = true;
     }
 
+    private void loadDecentHolograms() {
+        final Plugin plugin = Bukkit.getPluginManager().getPlugin("DecentHolograms");
+
+        if (plugin == null) {
+            return;
+        }
+
+        this.supportDecentHolograms = true;
+    }
+
     private void sendDisableMessage() {
         this.pluginLogger.info(
                 this.consoleMessage.getMessage("plugin.enable.banner.1")
@@ -653,7 +676,7 @@ public final class Main extends JavaPlugin {
                 this.consoleMessage.getMessage("plugin.disable.banner.2", NAME, PLUGIN_VERSION)
         );
         this.pluginLogger.info(
-                this.consoleMessage.getMessage("plugin.enable.banner.3")
+                this.consoleMessage.getMessage("plugin.enable.banner.line")
         );
         sendFooter();
     }

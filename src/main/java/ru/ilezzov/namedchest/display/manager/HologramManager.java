@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 import ru.ilezzov.namedchest.Main;
 import ru.ilezzov.namedchest.display.MyHologram;
 import ru.ilezzov.namedchest.display.hologram.ArmorStandHologram;
+import ru.ilezzov.namedchest.display.hologram.DecentHologram;
 import ru.ilezzov.namedchest.file.ConfigFile;
 import ru.ilezzov.namedchest.model.Response;
 import ru.ilezzov.namedchest.utils.Utils;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class HologramManager {
     private final Main plugin;
     private final ConfigFile configFile;
+    private final boolean supportDHAPI;
 
     private final Map<UUID, MyHologram> activeHolograms = new HashMap<>();
 
@@ -30,6 +32,7 @@ public class HologramManager {
 
     public HologramManager(final Main plugin) {
         this.plugin = plugin;
+        this.supportDHAPI = plugin.isSupportDecentHolograms();
         configFile = plugin.getConfigFile();
     }
 
@@ -61,7 +64,7 @@ public class HologramManager {
                         }
 
                         final Component name = acceptedBlock.data();
-                        final MyHologram newHologram = new ArmorStandHologram(name, blockLocation);
+                        final MyHologram newHologram = this.createHologram(name, blockLocation);
 
                         this.activeHolograms.put(playerUUID, newHologram);
                         newHologram.spawn(player.getLocation());
@@ -104,5 +107,12 @@ public class HologramManager {
 
         final Component name = container.customName();
         return name == null ? Response.error("") : Response.ok(name);
+    }
+
+    private MyHologram createHologram(final Component name, final Location blockLocation) {
+        if (supportDHAPI) {
+            return new DecentHologram(name, blockLocation);
+        }
+        return new ArmorStandHologram(name, blockLocation);
     }
 }
