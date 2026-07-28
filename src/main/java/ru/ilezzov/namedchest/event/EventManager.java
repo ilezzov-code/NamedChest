@@ -4,10 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import ru.ilezzov.namedchest.Main;
-import ru.ilezzov.namedchest.event.listeners.PlayerBlockBreakEvent;
-import ru.ilezzov.namedchest.event.listeners.PlayerJoinEvent;
-import ru.ilezzov.namedchest.event.listeners.PlayerUseAnvilEvent;
-import ru.ilezzov.namedchest.event.listeners.PlayerUseNameTagEvent;
+import ru.ilezzov.namedchest.event.listeners.*;
 import ru.ilezzov.namedchest.file.ConfigFile;
 import ru.ilezzov.namedchest.logger.ConsoleMessage;
 import ru.ilezzov.namedchest.logger.PluginLogger;
@@ -95,6 +92,9 @@ public class EventManager {
                 ),
                 Map.entry(new PlayerBlockBreakEvent(configFile),
                         !this.configFile.nameSettings.saveWhenBreaking
+                ),
+                Map.entry(
+                        new PlayerLeaveEvent(plugin.getHologramManager()), true
                 )
         );
     }

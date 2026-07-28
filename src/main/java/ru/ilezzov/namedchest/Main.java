@@ -60,7 +60,7 @@ public final class Main extends JavaPlugin {
     private VersionControl versionControl;
     @Getter
     private EventManager eventManager;
-
+    @Getter
     private HologramManager hologramManager;
 
     @Getter
@@ -127,16 +127,16 @@ public final class Main extends JavaPlugin {
         this.versionControl.startBackgroundCheckTask();
         this.versionControl.startCriticalNotifyTask();
 
-        this.eventManager = new EventManager(this);
-        eventManager.registerEvents();
-
-        new CommandManager(this).loadCommands();
-
         this.loadWorldGuard();
         this.loadDecentHolograms();
 
         this.hologramManager = new HologramManager(this);
         this.hologramManager.start();
+
+        this.eventManager = new EventManager(this);
+        eventManager.registerEvents();
+
+        new CommandManager(this).loadCommands();
 
         this.loadMetrics();
 

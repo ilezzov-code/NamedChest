@@ -48,7 +48,7 @@ public class HologramManager {
 
                         if (!acceptedBlock.success()) {
                             if (hologram != null) {
-                                this.kill(playerUUID, hologram);
+                                this.killIfExists(playerUUID, hologram);
                             }
                             continue;
                         }
@@ -60,7 +60,7 @@ public class HologramManager {
                         }
 
                         if (hologram != null) {
-                            this.kill(playerUUID, hologram);
+                            this.killIfExists(playerUUID, hologram);
                         }
 
                         final Component name = acceptedBlock.data();
@@ -79,7 +79,14 @@ public class HologramManager {
         }
     }
 
-    public void kill(final UUID uuid, final MyHologram hologram) {
+    public void killIfExists(final UUID uuid) {
+        final MyHologram hologram = this.activeHolograms.get(uuid);
+        if (hologram != null) {
+            hologram.kill();
+        }
+    }
+
+    public void killIfExists(final UUID uuid, final MyHologram hologram) {
         hologram.kill();
         this.activeHolograms.remove(uuid);
     }
