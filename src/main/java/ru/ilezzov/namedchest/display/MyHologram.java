@@ -6,6 +6,17 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 
 public abstract class MyHologram {
+    private static final BlockFace[] RADIAL = {
+            BlockFace.SOUTH,
+            BlockFace.SOUTH_WEST,
+            BlockFace.WEST,
+            BlockFace.NORTH_WEST,
+            BlockFace.NORTH,
+            BlockFace.NORTH_EAST,
+            BlockFace.EAST,
+            BlockFace.SOUTH_EAST
+    };
+
     @Getter
     protected final Location blockLocation;
     protected final Component name;
@@ -28,28 +39,18 @@ public abstract class MyHologram {
             case WEST -> blockLocation.add(1, y, 0.5);
             case EAST -> blockLocation.add(0, y, 0.5);
             case SOUTH -> blockLocation.add(0.5, y, 0);
+            case SOUTH_WEST -> blockLocation.add(1, y, 0);
+            case SOUTH_EAST -> blockLocation.add(0, y, 0);
+            case NORTH_WEST -> blockLocation.add(1, y, 1);
+            case NORTH_EAST -> blockLocation.add(0, y, 1);
             default -> blockLocation.add(0.5, y,0.5);
         };
     }
 
     protected BlockFace getCardinalDirection(final Location playerLocation) {
-        float yaw = playerLocation.getYaw();
+        final float yaw = (playerLocation.getYaw() % 360 + 360) % 360;
+        final int index = Math.round(yaw / 45.0f) % 8;
 
-        if (yaw < 0) {
-            yaw += 360;
-        }
-
-        if (yaw >= 315 || yaw < 45) {
-            return BlockFace.SOUTH;
-        } else if (yaw >= 45 && yaw < 135) {
-            return BlockFace.WEST;
-        } else if (yaw >= 135 && yaw < 225) {
-            return BlockFace.NORTH;
-        } else if (yaw >= 225) {
-            return BlockFace.EAST;
-        } else {
-            return BlockFace.SOUTH;
-        }
+        return RADIAL[index];
     }
-
 }
