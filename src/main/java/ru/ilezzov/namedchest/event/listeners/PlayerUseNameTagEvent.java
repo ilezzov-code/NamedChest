@@ -2,6 +2,7 @@ package ru.ilezzov.namedchest.event.listeners;
 
 import com.google.common.util.concurrent.UncheckedTimeoutException;
 import net.kyori.adventure.text.Component;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -170,7 +171,11 @@ public class PlayerUseNameTagEvent implements Listener {
         }
 
         Utils.setContainerName(container, name);
-        itemStack.subtract(1);
+
+        if (player.getGameMode() != GameMode.CREATIVE) {
+            itemStack.subtract(1);
+        }
+
         placeholder.addPlaceholder("{BLOCK}", Utils.getMaterialLang(material));
 
         this.messageManager.send(
