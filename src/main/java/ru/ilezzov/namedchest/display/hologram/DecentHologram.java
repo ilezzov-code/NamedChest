@@ -14,14 +14,15 @@ public class DecentHologram extends MyHologram {
     private Hologram hologram;
 
     private static final String HOLOGRAM_NAME_PATTERN = "nc-hologram-%d-%d-%d-%d";
+    private static final double BLOCK_Y = 0.7;
 
-    public DecentHologram(Component name, Location blockLocation) {
-        super(name, blockLocation);
+    public DecentHologram(final Component name, final Location blockLocation, final float yaw) {
+        super(name, blockLocation,  yaw);
     }
 
     @Override
     public void spawn(final Location playerLocation) {
-        if (hologram != null) {
+        if (this.hologram != null) {
             return;
         }
 
@@ -31,17 +32,26 @@ public class DecentHologram extends MyHologram {
 
         this.hologram = DHAPI.createHologram(
                 hName,
-                this.createHologramLocation(playerLocation, 0.7),
+                this.createHologramLocation(playerLocation, BLOCK_Y),
                 List.of(LegacyComponentSerializer.legacySection().serialize(this.name))
         );
     }
 
     @Override
     public void kill() {
-        if (hologram == null) {
+        if (this.hologram == null) {
             return;
         }
-        hologram.delete();
+        this.hologram.delete();
+    }
+
+    @Override
+    public void move(final Location playerLocation) {
+        if (this.hologram == null) {
+            return;
+        }
+
+        DHAPI.moveHologram(this.hologram, this.createHologramLocation(playerLocation, BLOCK_Y));
     }
 
     private String createHologramName(final Location location) {

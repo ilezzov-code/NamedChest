@@ -1,6 +1,7 @@
 package ru.ilezzov.namedchest.display;
 
 import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
@@ -19,16 +20,22 @@ public abstract class MyHologram {
 
     @Getter
     protected final Location blockLocation;
+    @Getter
+    @Setter
+    protected float yaw;
     protected final Component name;
 
-    public MyHologram(final Component name, final Location blockLocation) {
-        this.name = name;
+    public MyHologram(final Component name, final Location blockLocation, final float yaw) {
         this.blockLocation = blockLocation;
+        this.yaw = yaw;
+        this.name = name;
     }
 
     public abstract void spawn(final Location playerLocation);
 
     public abstract void kill();
+
+    public abstract void move(final Location playerLocation);
 
     protected Location createHologramLocation(final Location playerLocation, final double y) {
         final BlockFace blockFace = this.getCardinalDirection(playerLocation);

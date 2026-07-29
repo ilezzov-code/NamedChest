@@ -54,8 +54,14 @@ public class HologramManager {
                         }
 
                         final Location blockLocation = block.getLocation();
+                        final Location playerLocation = player.getLocation();
+                        final float yaw = (playerLocation.getYaw() % 360 + 360) % 360;
 
                         if (hologram != null && hologram.getBlockLocation().equals(blockLocation)) {
+                            if (Math.abs(hologram.getYaw() - yaw) >= 22.5) {
+                                hologram.move(playerLocation);
+                            }
+
                             continue;
                         }
 
@@ -64,10 +70,10 @@ public class HologramManager {
                         }
 
                         final Component name = acceptedBlock.data();
-                        final MyHologram newHologram = this.createHologram(name, blockLocation);
+                        final MyHologram newHologram = this.createHologram(name, blockLocation, yaw);
 
                         this.activeHolograms.put(playerUUID, newHologram);
-                        newHologram.spawn(player.getLocation());
+                        newHologram.spawn(playerLocation);
                     }
                 }, 0L, 3L
         );
@@ -116,10 +122,10 @@ public class HologramManager {
         return name == null ? Response.error("") : Response.ok(name);
     }
 
-    private MyHologram createHologram(final Component name, final Location blockLocation) {
+    private MyHologram createHologram(final Component name, final Location blockLocation, final float yaw) {
         if (supportDHAPI) {
-            return new DecentHologram(name, blockLocation);
+            return new DecentHologram(name, blockLocation, yaw);
         }
-        return new ArmorStandHologram(name, blockLocation);
+        return new ArmorStandHologram(name, blockLocation, yaw);
     }
 }
