@@ -2,6 +2,7 @@ package ru.ilezzov.namedchest.command.executors;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
@@ -121,6 +122,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             this.messageManager.send(
                     sender, this.message().plugin.noPerms, placeholder
             );
+            this.playErrorSound(sender);
             return;
         }
 
@@ -135,6 +137,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                 this.messageManager.sendFromThread(
                        sender, this.message().version.error, placeholder
                 );
+                this.playErrorSound(sender);
                 return;
             }
 
@@ -172,6 +175,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             this.messageManager.send(
                     sender, this.message().plugin.noPerms, placeholder
             );
+            this.playErrorSound(sender);
             return;
         }
 
@@ -206,6 +210,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             this.messageManager.send(
                     sender, this.message().plugin.commandDisable, placeholder
             );
+            this.playErrorSound(sender);
             return;
         }
 
@@ -213,6 +218,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             this.messageManager.send(
                     sender, this.message().plugin.noConsole, placeholder
             );
+            this.playErrorSound(sender);
             return;
         }
 
@@ -220,6 +226,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             this.messageManager.send(
                     sender, this.message().plugin.noPerms, placeholder
             );
+            this.playErrorSound(player);
             return;
         }
 
@@ -228,9 +235,12 @@ public class MainCommand implements CommandExecutor, TabExecutor {
 
             if (response.hasCooldown()) {
                 placeholder.addPlaceholder("{COOLDOWN}", TimeUnit.MILLISECONDS.toSeconds(response.remaining()));
+
                 this.messageManager.send(
                         sender, this.message().plugin.cooldown, placeholder
                 );
+                this.playErrorSound(player);
+
                 return;
             }
         }
@@ -240,6 +250,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             this.messageManager.send(
                     sender, commandSubConfig.error.emptyName, placeholder
             );
+            this.playErrorSound(player);
             return;
         }
 
@@ -251,6 +262,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             this.messageManager.send(
                     sender, commandSubConfig.error.nullBlock, placeholder
             );
+            this.playErrorSound(player);
             return;
         }
 
@@ -259,9 +271,12 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             final String stringMaterials = Utils.getMaterialsString(this.configFile.supportedBlocks);
 
             placeholder.addPlaceholder("{SUPPORTED_BLOCKS}", stringMaterials);
+
             this.messageManager.send(
                     sender, commandSubConfig.error.unsupportedBlock, placeholder
             );
+            this.playErrorSound(player);
+
             return;
         }
 
@@ -271,9 +286,12 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             final String stringMaterials = Utils.getMaterialsString(this.configFile.supportedBlocks);
 
             placeholder.addPlaceholder("{SUPPORTED_BLOCKS}", stringMaterials);
+
             this.messageManager.send(
                     sender, commandSubConfig.error.unsupportedBlock, placeholder
             );
+            this.playErrorSound(player);
+
             return;
         }
 
@@ -283,6 +301,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                     this.messageManager.send(
                             sender, commandSubConfig.error.notYourRegion, placeholder
                     );
+                    this.playErrorSound(player);
                     return;
                 }
             }
@@ -297,15 +316,19 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             this.messageManager.send(
                     sender, commandSubConfig.error.emptyName, placeholder
             );
+            this.playErrorSound(player);
             return;
         }
 
         if (!PermissionManager.hasPermission(sender, Permissions.IGNORE_MAX_LENGTH)) {
             if (nameWithoutColors.length() > this.configFile.nameSettings.maxLength) {
                 placeholder.addPlaceholder("{MAX_LENGTH}", this.configFile.nameSettings.maxLength);
+
                 this.messageManager.send(
                         sender, commandSubConfig.error.exceededNameLength, placeholder
                 );
+                this.playErrorSound(player);
+
                 return;
             }
         }
@@ -434,5 +457,9 @@ public class MainCommand implements CommandExecutor, TabExecutor {
 
     private MessageFile message() {
         return this.plugin.getMessageFile();
+    }
+
+    private void playErrorSound(final CommandSender sender) {
+        Utils.playErrorSound(sender, this.configFile.errorSound);
     }
 }

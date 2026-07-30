@@ -5,6 +5,7 @@ import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.CustomKey;
 import eu.okaeri.configs.annotation.Header;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -217,6 +218,20 @@ public class ConfigFile extends OkaeriConfig {
 
         @Comment("Cooldown in using commands in seconds | Задержка на использование команд в секундах")
         public int cooldown = 5;
+    }
+
+    @Comment({
+            "",
+            "Звук при возникновении ошибки"
+    })
+    @CustomKey("error-sound")
+    public ErrorSound errorSound = new ErrorSound();
+
+    public static class ErrorSound extends OkaeriConfig {
+        public boolean enable = true;
+        public String sound = "entity.villager.no";
+        public float volume = 1.0f;
+        public float pitch = 1.0f;
     }
 
     @Comment("")

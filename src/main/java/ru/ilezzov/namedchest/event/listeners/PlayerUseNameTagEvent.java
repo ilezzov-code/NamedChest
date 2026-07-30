@@ -58,9 +58,12 @@ public class PlayerUseNameTagEvent implements Listener {
 
             if (response.hasCooldown()) {
                 placeholder.addPlaceholder("{COOLDOWN}", TimeUnit.MILLISECONDS.toSeconds(response.remaining()));
+
                 this.messageManager.send(
                         player, this.message().plugin.cooldown, placeholder
                 );
+                this.playErrorSound(player);
+
                 return;
             }
         }
@@ -85,32 +88,17 @@ public class PlayerUseNameTagEvent implements Listener {
         final MessageFile.MainCommandSubConfig commandSubConfig = this.message().mainCommand;
 
         if (block == null) {
-            this.messageManager.send(
-                    player, commandSubConfig.error.nullBlock, placeholder
-            );
             return;
         }
 
         final Material material = block.getType();
         if (!this.configFile.supportedBlocks.contains(material)) {
-            final String stringMaterials = Utils.getMaterialsString(this.configFile.supportedBlocks);
-
-            placeholder.addPlaceholder("{SUPPORTED_BLOCKS}", stringMaterials);
-            this.messageManager.send(
-                    player, commandSubConfig.error.unsupportedBlock, placeholder
-            );
             return;
         }
 
         final BlockState state = block.getState();
 
         if (!(state instanceof Container container)) {
-            final String stringMaterials = Utils.getMaterialsString(this.configFile.supportedBlocks);
-
-            placeholder.addPlaceholder("{SUPPORTED_BLOCKS}", stringMaterials);
-            this.messageManager.send(
-                    player, commandSubConfig.error.unsupportedBlock, placeholder
-            );
             return;
         }
 
@@ -120,6 +108,7 @@ public class PlayerUseNameTagEvent implements Listener {
                     this.messageManager.send(
                             player, commandSubConfig.error.notYourRegion, placeholder
                     );
+                    this.playErrorSound(player);
                     return;
                 }
             }
@@ -132,6 +121,7 @@ public class PlayerUseNameTagEvent implements Listener {
             this.messageManager.send(
                     player, commandSubConfig.error.emptyName, placeholder
             );
+            this.playErrorSound(player);
             return;
         }
 
@@ -146,6 +136,7 @@ public class PlayerUseNameTagEvent implements Listener {
             this.messageManager.send(
                     player, commandSubConfig.error.emptyName, placeholder
             );
+            this.playErrorSound(player);
             return;
         }
 
@@ -155,6 +146,7 @@ public class PlayerUseNameTagEvent implements Listener {
                 this.messageManager.send(
                         player, commandSubConfig.error.exceededNameLength, placeholder
                 );
+                this.playErrorSound(player);
                 return;
             }
         }
@@ -188,5 +180,9 @@ public class PlayerUseNameTagEvent implements Listener {
 
     private MessageFile message() {
         return this.plugin.getMessageFile();
+    }
+
+    private void playErrorSound(final Player player) {
+        Utils.playErrorSound(player, this.configFile.errorSound);
     }
 }
