@@ -8,12 +8,14 @@ import com.sk89q.worldguard.protection.regions.RegionQuery;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.RayTraceResult;
 import ru.ilezzov.namedchest.file.ConfigFile;
 
 import java.util.ArrayList;
@@ -56,13 +58,22 @@ public class Utils {
         );
     }
 
-    public static Block getTargetBlock(final Player player, final int maxDistance, final Set<Material> ignoredBlocks) {
-        final Block targetBlock = player.getTargetBlock(ignoredBlocks, maxDistance);
-        if (!targetBlock.getType().isAir()) {
-            return targetBlock;
-        }
+    public static Block getTargetBlock(final Player player, final int maxDistance, final boolean ignorePassableBlocks) {
+        if (ignorePassableBlocks) {
+            final RayTraceResult result = player.getWorld().rayTraceBlocks(
+                    player.getEyeLocation(),
+                    player.getEyeLocation().getDirection(),
+                    maxDistance,
+                    FluidCollisionMode.NEVER,
+                    true
+            );
 
-        return null;
+            if (result != null && result.getHitBlock() != null) {
+                return result.getHitBlock();
+            }
+            return null;
+        }
+        return player.getTargetBlock(maxDistance);
     }
 
     public static String getTextNameFromList(final String[] args, final boolean supportSpaces) {

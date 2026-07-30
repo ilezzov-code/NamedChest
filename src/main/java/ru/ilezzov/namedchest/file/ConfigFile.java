@@ -135,19 +135,11 @@ public class ConfigFile extends OkaeriConfig {
 
     @Comment({
             "",
-            "Список блоков, сквозь которые будет проходить взгляд (RayTrace)",
-            "A list of blocks that the view will pass through (RayTrace)",
-            "",
-            "Air / Воздух: AIR, CAVE_AIR, VOID_AIR",
-            "Grass(seagrass) / Трава(морская трава): GRASS, TALL_GRASS, SEAGRASS, TALL_SEAGRASS",
-            "Fern and vine / Папоротник и лиана: FERN, LARGE_FERN, VINE",
+            "Whether to ignore passable obstacles (such as tall grass, signs, fluids, etc.) when hovering over a block",
+            "Следует ли игнорировать проходимые, но встречающиеся препятствия (например, высокую траву, знаки, жидкости, ..) при наведение курсора на блок"
     })
-    @CustomKey("ignored-blocks")
-    public Set<Material> ignoredBlocks = EnumSet.of(
-            Material.AIR, Material.CAVE_AIR, Material.VOID_AIR,
-            Material.GRASS, Material.TALL_GRASS, Material.SEAGRASS, Material.TALL_SEAGRASS,
-            Material.FERN, Material.LARGE_FERN, Material.VINE, Material.LIGHT, Material.STRUCTURE_VOID
-    );
+    @CustomKey("ignore-passable-blocks")
+    public boolean ignorePassableBlocks = true;
 
     @Comment({
             "",

@@ -257,7 +257,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         }
 
         final Block block = Utils.getTargetBlock(
-                player, this.configFile.maxDistance, this.configFile.ignoredBlocks
+                player, this.configFile.maxDistance, this.configFile.ignorePassableBlocks
         );
 
         if (block == null) {
@@ -394,7 +394,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
 
         final MessageFile.MainCommandSubConfig commandSubConfig = this.message().mainCommand;
         final Block block = Utils.getTargetBlock(
-                player, this.configFile.maxDistance, this.configFile.ignoredBlocks
+                player, this.configFile.maxDistance, this.configFile.ignorePassableBlocks
         );
 
         if (block == null) {

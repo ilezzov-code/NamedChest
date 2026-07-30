@@ -40,7 +40,7 @@ public class HologramManager {
         tracerTask = Bukkit.getScheduler().runTaskTimer(
                 this.plugin, () -> {
                     for (final Player player : Bukkit.getOnlinePlayers()) {
-                        final Block block = Utils.getTargetBlock(player, this.configFile.maxDistance, this.configFile.ignoredBlocks);
+                        final Block block = Utils.getTargetBlock(player, this.configFile.maxDistance, this.configFile.ignorePassableBlocks);
                         final Response<Component> acceptedBlock = this.checkBlock(block);
 
                         final UUID playerUUID = player.getUniqueId();

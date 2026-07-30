@@ -82,7 +82,7 @@ public class PlayerUseNameTagEvent implements Listener {
         }
 
         final Block block = Utils.getTargetBlock(
-                player, this.configFile.maxDistance, this.configFile.ignoredBlocks
+                player, this.configFile.maxDistance, this.configFile.ignorePassableBlocks
         );
         final MessageFile.MainCommandSubConfig commandSubConfig = this.message().mainCommand;
 
