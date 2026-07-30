@@ -1,9 +1,6 @@
 package ru.ilezzov.namedchest.event.listeners;
 
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.sound.Sound;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -13,22 +10,19 @@ import org.bukkit.inventory.ItemStack;
 import ru.ilezzov.namedchest.Main;
 import ru.ilezzov.namedchest.file.ConfigFile;
 import ru.ilezzov.namedchest.file.MessageFile;
-import ru.ilezzov.namedchest.message.MessageManager;
+import ru.ilezzov.namedchest.send.SendManager;
 import ru.ilezzov.namedchest.placeholder.PluginPlaceholder;
-import ru.ilezzov.namedchest.utils.Utils;
-
-import static ru.ilezzov.namedchest.utils.Utils.*;
 
 public class PlayerUseAnvilEvent implements Listener {
     private final Main plugin;
     private final ConfigFile configFile;
-    private final MessageManager messageManager;
+    private final SendManager sendManager;
     private final PluginPlaceholder placeholder;
 
     public PlayerUseAnvilEvent(final Main plugin) {
         this.plugin = plugin;
         this.configFile = plugin.getConfigFile();
-        this.messageManager = plugin.getMessageManager();
+        this.sendManager = plugin.getSendManager();
         this.placeholder = new PluginPlaceholder(
                 this.message().plugin.prefix, this.message().plugin.prefixError
         );
@@ -61,10 +55,10 @@ public class PlayerUseAnvilEvent implements Listener {
         final Entity entity = event.getWhoClicked();
         event.setCancelled(true);
 
-        this.messageManager.send(
+        this.sendManager.sendMessage(
                 entity, this.message().mainCommand.error.cancelAnvil, placeholder
         );
-        playErrorSound(entity, this.configFile.errorSound);
+        this.sendManager.playErrorSound(entity);
     }
 
     public MessageFile message() {

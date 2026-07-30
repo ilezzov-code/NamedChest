@@ -2,7 +2,6 @@ package ru.ilezzov.namedchest.command.executors;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
@@ -23,7 +22,7 @@ import ru.ilezzov.namedchest.file.ConfigFile;
 import ru.ilezzov.namedchest.file.MessageFile;
 import ru.ilezzov.namedchest.logger.ConsoleMessage;
 import ru.ilezzov.namedchest.logger.PluginLogger;
-import ru.ilezzov.namedchest.message.MessageManager;
+import ru.ilezzov.namedchest.send.SendManager;
 import ru.ilezzov.namedchest.permission.PermissionManager;
 import ru.ilezzov.namedchest.permission.Permissions;
 import ru.ilezzov.namedchest.placeholder.PluginPlaceholder;
@@ -41,7 +40,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
     private final Main plugin;
     private final PluginLogger pluginLogger;
     private final VersionManager versionManager;
-    private final MessageManager messageManager;
+    private final SendManager sendManager;
     private final ConfigFile configFile;
     private final ConsoleMessage consoleMessage;
     private final CooldownManager cooldownManager;
@@ -57,7 +56,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         this.plugin = plugin;
         this.pluginLogger = plugin.getPluginLogger();
         this.versionManager = plugin.getVersionManager();
-        this.messageManager = plugin.getMessageManager();
+        this.sendManager = plugin.getSendManager();
         this.configFile = plugin.getConfigFile();
         this.consoleMessage = plugin.getConsoleMessage();
         this.cooldownManager = plugin.getNameCooldownManager();
@@ -108,7 +107,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
     }
 
     private void handleHelp(final CommandSender sender, final PluginPlaceholder placeholder) {
-        this.messageManager.send(
+        this.sendManager.sendMessage(
                 sender, this.message().mainCommand.help, placeholder
         );
     }
@@ -119,14 +118,14 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         );
 
         if (!PermissionManager.hasPermission(sender, Permissions.VERSION_COMMAND)) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, this.message().plugin.noPerms, placeholder
             );
-            this.playErrorSound(sender);
+            this.sendManager.playErrorSound(sender);
             return;
         }
 
-        this.messageManager.send(
+        this.sendManager.sendMessage(
                 sender, this.message().version.loading,placeholder
         );
 
@@ -134,10 +133,10 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             final VersionData versionData = this.versionManager.getVersionData();
 
             if (versionData == null) {
-                this.messageManager.sendFromThread(
+                this.sendManager.sendMessageFromThread(
                        sender, this.message().version.error, placeholder
                 );
-                this.playErrorSound(sender);
+                this.sendManager.playErrorSound(sender);
                 return;
             }
 
@@ -146,25 +145,25 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             placeholder.addPlaceholder("{DOWNLOAD_LINK}", versionData.getLatest().getVersion());
 
             if (this.versionManager.getVersionType() == VersionType.LATEST) {
-                this.messageManager.sendFromThread(
+                this.sendManager.sendMessageFromThread(
                         sender, this.message().version.latest, placeholder
                 );
                 return;
             }
 
             switch (versionManager.getVersionType()) {
-                case SUPPORTED -> this.messageManager.sendFromThread(
+                case SUPPORTED -> this.sendManager.sendMessageFromThread(
                         sender, this.message().version.supported, placeholder
                 );
-                case BLACKLIST -> this.messageManager.sendFromThread(
+                case BLACKLIST -> this.sendManager.sendMessageFromThread(
                         sender, this.message().version.blacklist, placeholder
                 );
-                case OUTDATED -> this.messageManager.sendFromThread(
+                case OUTDATED -> this.sendManager.sendMessageFromThread(
                         sender, this.message().version.outdated, placeholder
                 );
             }
 
-            this.messageManager.sendFromThread(
+            this.sendManager.sendMessageFromThread(
                     sender, this.message().version.download, placeholder
             );
         });
@@ -172,10 +171,10 @@ public class MainCommand implements CommandExecutor, TabExecutor {
 
     private void handleReload(final CommandSender sender, final PluginPlaceholder placeholder) {
         if (!PermissionManager.hasPermission(sender, Permissions.RELOAD)) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, this.message().plugin.noPerms, placeholder
             );
-            this.playErrorSound(sender);
+            this.sendManager.playErrorSound(sender);
             return;
         }
 
@@ -200,33 +199,33 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         versionControl.startBackgroundCheckTask();
         versionControl.startCriticalNotifyTask();
 
-        this.messageManager.send(
+        this.sendManager.sendMessage(
                 sender, this.message().plugin.reload, placeholder
         );
     }
 
     public void handleSet(final CommandSender sender, final String[] args, final PluginPlaceholder placeholder) {
         if (!this.configFile.commandSettings.enableSet) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, this.message().plugin.commandDisable, placeholder
             );
-            this.playErrorSound(sender);
+            this.sendManager.playErrorSound(sender);
             return;
         }
 
         if (!(sender instanceof Player player)) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, this.message().plugin.noConsole, placeholder
             );
-            this.playErrorSound(sender);
+            this.sendManager.playErrorSound(sender);
             return;
         }
 
         if (!PermissionManager.hasPermission(sender, Permissions.SET_COMMAND, Permissions.COLOR_NAME)) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, this.message().plugin.noPerms, placeholder
             );
-            this.playErrorSound(player);
+            this.sendManager.playErrorSound(player);
             return;
         }
 
@@ -236,10 +235,10 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             if (response.hasCooldown()) {
                 placeholder.addPlaceholder("{COOLDOWN}", TimeUnit.MILLISECONDS.toSeconds(response.remaining()));
 
-                this.messageManager.send(
+                this.sendManager.sendMessage(
                         sender, this.message().plugin.cooldown, placeholder
                 );
-                this.playErrorSound(player);
+                this.sendManager.playErrorSound(player);
 
                 return;
             }
@@ -247,10 +246,10 @@ public class MainCommand implements CommandExecutor, TabExecutor {
 
         final MessageFile.MainCommandSubConfig commandSubConfig = this.message().mainCommand;
         if (args.length < 2) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, commandSubConfig.error.emptyName, placeholder
             );
-            this.playErrorSound(player);
+            this.sendManager.playErrorSound(player);
             return;
         }
 
@@ -259,10 +258,10 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         );
 
         if (block == null) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, commandSubConfig.error.nullBlock, placeholder
             );
-            this.playErrorSound(player);
+            this.sendManager.playErrorSound(player);
             return;
         }
 
@@ -272,10 +271,10 @@ public class MainCommand implements CommandExecutor, TabExecutor {
 
             placeholder.addPlaceholder("{SUPPORTED_BLOCKS}", stringMaterials);
 
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, commandSubConfig.error.unsupportedBlock, placeholder
             );
-            this.playErrorSound(player);
+            this.sendManager.playErrorSound(player);
 
             return;
         }
@@ -287,10 +286,10 @@ public class MainCommand implements CommandExecutor, TabExecutor {
 
             placeholder.addPlaceholder("{SUPPORTED_BLOCKS}", stringMaterials);
 
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, commandSubConfig.error.unsupportedBlock, placeholder
             );
-            this.playErrorSound(player);
+            this.sendManager.playErrorSound(player);
 
             return;
         }
@@ -298,10 +297,10 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         if (this.plugin.isSupportWorldGuard()) {
             if (!PermissionManager.hasPermission(sender, Permissions.IGNORE_REGIONS)) {
                 if (!Utils.canModify(player, block.getLocation(), this.plugin.getWorldGuard())) {
-                    this.messageManager.send(
+                    this.sendManager.sendMessage(
                             sender, commandSubConfig.error.notYourRegion, placeholder
                     );
-                    this.playErrorSound(player);
+                    this.sendManager.playErrorSound(player);
                     return;
                 }
             }
@@ -313,10 +312,10 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         final String nameWithoutColors = LegacySerialize.serializeWithoutColors(name);
 
         if (nameWithoutColors.isBlank()) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, commandSubConfig.error.emptyName, placeholder
             );
-            this.playErrorSound(player);
+            this.sendManager.playErrorSound(player);
             return;
         }
 
@@ -324,10 +323,10 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             if (nameWithoutColors.length() > this.configFile.nameSettings.maxLength) {
                 placeholder.addPlaceholder("{MAX_LENGTH}", this.configFile.nameSettings.maxLength);
 
-                this.messageManager.send(
+                this.sendManager.sendMessage(
                         sender, commandSubConfig.error.exceededNameLength, placeholder
                 );
-                this.playErrorSound(player);
+                this.sendManager.playErrorSound(player);
 
                 return;
             }
@@ -347,7 +346,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         Utils.setContainerName(container, name);
         placeholder.addPlaceholder("{BLOCK}", Utils.getMaterialLang(material));
 
-        this.messageManager.send(
+        this.sendManager.sendMessage(
                 sender, commandSubConfig.set, placeholder
         );
         this.cooldownManager.newCooldown(player.getUniqueId(), TimeUnit.SECONDS.toMillis(
@@ -357,21 +356,21 @@ public class MainCommand implements CommandExecutor, TabExecutor {
 
     public void handleClear(final CommandSender sender, final PluginPlaceholder placeholder) {
         if (!this.configFile.commandSettings.enableSet) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, this.message().plugin.commandDisable, placeholder
             );
             return;
         }
 
         if (!(sender instanceof Player player)) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, this.message().plugin.noConsole, placeholder
             );
             return;
         }
 
         if (!PermissionManager.hasPermission(sender, Permissions.CLEAR_COMMAND)) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, this.message().plugin.noPerms, placeholder
             );
             return;
@@ -382,7 +381,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
 
             if (response.hasCooldown()) {
                 placeholder.addPlaceholder("{COOLDOWN}", TimeUnit.MILLISECONDS.toSeconds(response.remaining()));
-                this.messageManager.send(
+                this.sendManager.sendMessage(
                         sender, this.message().plugin.cooldown, placeholder
                 );
                 return;
@@ -395,7 +394,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         );
 
         if (block == null) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, commandSubConfig.error.nullBlock, placeholder
             );
             return;
@@ -406,7 +405,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             final String stringMaterials = Utils.getMaterialsString(this.configFile.supportedBlocks);
 
             placeholder.addPlaceholder("{SUPPORTED_BLOCKS}", stringMaterials);
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, commandSubConfig.error.unsupportedBlock, placeholder
             );
             return;
@@ -418,7 +417,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             final String stringMaterials = Utils.getMaterialsString(this.configFile.supportedBlocks);
 
             placeholder.addPlaceholder("{SUPPORTED_BLOCKS}", stringMaterials);
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, commandSubConfig.error.unsupportedBlock, placeholder
             );
             return;
@@ -427,7 +426,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         if (this.plugin.isSupportWorldGuard()) {
             if (!PermissionManager.hasPermission(sender, Permissions.IGNORE_REGIONS)) {
                 if (!Utils.canModify(player, block.getLocation(), this.plugin.getWorldGuard())) {
-                    this.messageManager.send(
+                    this.sendManager.sendMessage(
                             sender, commandSubConfig.error.notYourRegion, placeholder
                     );
                     return;
@@ -438,7 +437,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         final Component name = container.customName();
 
         if (name == null) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     sender, commandSubConfig.error.alreadyClear, placeholder
             );
             return;
@@ -447,7 +446,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         Utils.clearContainerName(container);
         placeholder.addPlaceholder("{BLOCK}", Utils.getMaterialLang(material));
 
-        this.messageManager.send(
+        this.sendManager.sendMessage(
                 sender, commandSubConfig.clear, placeholder
         );
         this.cooldownManager.newCooldown(player.getUniqueId(), TimeUnit.SECONDS.toMillis(
@@ -457,9 +456,5 @@ public class MainCommand implements CommandExecutor, TabExecutor {
 
     private MessageFile message() {
         return this.plugin.getMessageFile();
-    }
-
-    private void playErrorSound(final CommandSender sender) {
-        Utils.playErrorSound(sender, this.configFile.errorSound);
     }
 }

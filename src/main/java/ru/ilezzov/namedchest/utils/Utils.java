@@ -78,12 +78,4 @@ public class Utils {
 
         return String.join(" ", args);
     }
-
-    public static void playErrorSound(final CommandSender sender, final ConfigFile.ErrorSound errorSound) {
-        if (errorSound.enable) {
-            sender.playSound(
-                    Sound.sound(Key.key(errorSound.sound), Sound.Source.PLAYER, errorSound.volume, errorSound.pitch)
-            );
-        }
-    }
 }

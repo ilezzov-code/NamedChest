@@ -22,7 +22,7 @@ import ru.ilezzov.namedchest.file.ConfigFile;
 import ru.ilezzov.namedchest.file.MessageFile;
 import ru.ilezzov.namedchest.logger.ConsoleMessage;
 import ru.ilezzov.namedchest.logger.PluginLogger;
-import ru.ilezzov.namedchest.message.MessageManager;
+import ru.ilezzov.namedchest.send.SendManager;
 import ru.ilezzov.namedchest.version.VersionControl;
 import ru.ilezzov.namedchest.version.VersionData;
 import ru.ilezzov.namedchest.version.VersionManager;
@@ -53,7 +53,7 @@ public final class Main extends JavaPlugin {
     private MessageFile messageFile;
 
     @Getter
-    private MessageManager messageManager;
+    private SendManager sendManager;
     @Getter
     private VersionManager versionManager;
     @Getter
@@ -110,7 +110,7 @@ public final class Main extends JavaPlugin {
             this.migrateMessage(oldMessage);
         }
 
-        this.messageManager = new MessageManager(this);
+        this.sendManager = new SendManager(this);
 
         this.pluginLogger.debug(this.consoleMessage.getMessage("file.message.loaded", messageFileName));
 

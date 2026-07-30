@@ -1,6 +1,5 @@
 package ru.ilezzov.namedchest.event.listeners;
 
-import com.google.common.util.concurrent.UncheckedTimeoutException;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -20,7 +19,7 @@ import ru.ilezzov.namedchest.cooldown.CooldownManager;
 import ru.ilezzov.namedchest.cooldown.CooldownResponse;
 import ru.ilezzov.namedchest.file.ConfigFile;
 import ru.ilezzov.namedchest.file.MessageFile;
-import ru.ilezzov.namedchest.message.MessageManager;
+import ru.ilezzov.namedchest.send.SendManager;
 import ru.ilezzov.namedchest.permission.PermissionManager;
 import ru.ilezzov.namedchest.permission.Permissions;
 import ru.ilezzov.namedchest.placeholder.PluginPlaceholder;
@@ -31,14 +30,14 @@ import java.util.concurrent.TimeUnit;
 public class PlayerUseNameTagEvent implements Listener {
     private final Main plugin;
     private final ConfigFile configFile;
-    private final MessageManager messageManager;
+    private final SendManager sendManager;
     private final CooldownManager cooldownManager;
     private final PluginPlaceholder placeholder;
 
     public PlayerUseNameTagEvent(final Main plugin) {
         this.plugin = plugin;
         this.configFile = plugin.getConfigFile();
-        this.messageManager = plugin.getMessageManager();
+        this.sendManager = plugin.getSendManager();
         this.cooldownManager = plugin.getNameCooldownManager();
         this.placeholder = new PluginPlaceholder(
                 this.message().plugin.prefix, this.message().plugin.prefixError
@@ -59,10 +58,10 @@ public class PlayerUseNameTagEvent implements Listener {
             if (response.hasCooldown()) {
                 placeholder.addPlaceholder("{COOLDOWN}", TimeUnit.MILLISECONDS.toSeconds(response.remaining()));
 
-                this.messageManager.send(
+                this.sendManager.sendMessage(
                         player, this.message().plugin.cooldown, placeholder
                 );
-                this.playErrorSound(player);
+                this.sendManager.playErrorSound(player);
 
                 return;
             }
@@ -105,10 +104,10 @@ public class PlayerUseNameTagEvent implements Listener {
         if (this.plugin.isSupportWorldGuard()) {
             if (!PermissionManager.hasPermission(player, Permissions.IGNORE_REGIONS)) {
                 if (!Utils.canModify(player, block.getLocation(), this.plugin.getWorldGuard())) {
-                    this.messageManager.send(
+                    this.sendManager.sendMessage(
                             player, commandSubConfig.error.notYourRegion, placeholder
                     );
-                    this.playErrorSound(player);
+                    this.sendManager.playErrorSound(player);
                     return;
                 }
             }
@@ -118,10 +117,10 @@ public class PlayerUseNameTagEvent implements Listener {
 
         final ItemMeta nameTagMeta = itemStack.getItemMeta();
         if (!nameTagMeta.hasDisplayName()) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     player, commandSubConfig.error.emptyName, placeholder
             );
-            this.playErrorSound(player);
+            this.sendManager.playErrorSound(player);
             return;
         }
 
@@ -133,20 +132,20 @@ public class PlayerUseNameTagEvent implements Listener {
         final String nameWithoutColors = LegacySerialize.serializeWithoutColors(name);
 
         if (nameWithoutColors.isBlank()) {
-            this.messageManager.send(
+            this.sendManager.sendMessage(
                     player, commandSubConfig.error.emptyName, placeholder
             );
-            this.playErrorSound(player);
+            this.sendManager.playErrorSound(player);
             return;
         }
 
         if (!PermissionManager.hasPermission(player, Permissions.IGNORE_MAX_LENGTH)) {
             if (nameWithoutColors.length() > this.configFile.nameSettings.maxLength) {
                 placeholder.addPlaceholder("{MAX_LENGTH}", this.configFile.nameSettings.maxLength);
-                this.messageManager.send(
+                this.sendManager.sendMessage(
                         player, commandSubConfig.error.exceededNameLength, placeholder
                 );
-                this.playErrorSound(player);
+                this.sendManager.playErrorSound(player);
                 return;
             }
         }
@@ -170,7 +169,7 @@ public class PlayerUseNameTagEvent implements Listener {
 
         placeholder.addPlaceholder("{BLOCK}", Utils.getMaterialLang(material));
 
-        this.messageManager.send(
+        this.sendManager.sendMessage(
                 player, commandSubConfig.set, placeholder
         );
         this.cooldownManager.newCooldown(player.getUniqueId(), TimeUnit.SECONDS.toMillis(
@@ -180,9 +179,5 @@ public class PlayerUseNameTagEvent implements Listener {
 
     private MessageFile message() {
         return this.plugin.getMessageFile();
-    }
-
-    private void playErrorSound(final Player player) {
-        Utils.playErrorSound(player, this.configFile.errorSound);
     }
 }
