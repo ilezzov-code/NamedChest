@@ -591,7 +591,9 @@ public final class Main extends JavaPlugin {
         );
         this.metrics.addCustomChart(
                 new SimpleBarChart("soft_depend", () -> Map.of(
-                        "WorldGuard", this.supportWorldGuard ? 1 : 0)
+                        "WorldGuard", this.supportWorldGuard ? 1 : 0,
+                        "DecentHolograms", this.supportDecentHolograms ? 1: 0
+                        )
                 )
         );
     }
