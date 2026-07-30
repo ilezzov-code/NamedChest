@@ -85,7 +85,7 @@ public class EventManager {
                         this.configFile.versionControl.notifyAdminsOnJoin
                 ),
                 Map.entry(new PlayerUseAnvilEvent(plugin),
-                        this.configFile.nameSettings.cancelAnvil
+                        true
                 ),
                 Map.entry(new PlayerUseNameTagEvent(plugin),
                     this.configFile.nameSettings.supportNameTag
