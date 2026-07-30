@@ -124,7 +124,8 @@ public class ConfigFile extends OkaeriConfig {
             "Blocks that can be named / Блоки, которым можно будет дать имя",
             "Supporting blocks / Поддерживаемые блоки: CHEST (сундук), TRAPPED_CHEST (сундук-ловушка),",
             "BARREL (бочка), FURNACE (печка), SMOKER (коптильня), BLAST_FURNACE (плавильня), HOPPER (воронка),",
-            "DISPENSER (раздатчик), DROPPER (выбрасыватель), BREWING_STAND (варочная стойка), SHULKER_BOX (шалкер бокс)"
+            "DISPENSER (раздатчик), DROPPER (выбрасыватель), BREWING_STAND (варочная стойка), SHULKER_BOX (шалкер бокс),",
+            "TRAPPED_CHEST, WAXED_COPPER_CHEST, WAXED_EXPOSED_COPPER_CHEST, WAXED_WEATHERED_COPPER_CHEST, WAXED_OXIDIZED_COPPER_CHEST"
     })
     @CustomKey("supported-blocks")
     public Set<Material> supportedBlocks = EnumSet.of(
@@ -132,6 +133,14 @@ public class ConfigFile extends OkaeriConfig {
             Material.SMOKER, Material.BLAST_FURNACE, Material.HOPPER, Material.DISPENSER,
             Material.DROPPER, Material.BREWING_STAND, Material.SHULKER_BOX
     );
+    @Comment({
+            "The following blocks have been added to Minecraft 1.21.9",
+            "Следующие блоки добавлены в Minecraft 1.21.9",
+            "- WAXED_COPPER_CHEST",
+            "- WAXED_EXPOSED_COPPER_CHEST",
+            "- WAXED_WEATHERED_COPPER_CHEST",
+            "- WAXED_OXIDIZED_COPPER_CHEST"
+    })
 
     @Comment({
             "",
