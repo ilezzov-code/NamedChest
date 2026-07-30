@@ -148,6 +148,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                 this.sendManager.sendMessageFromThread(
                         sender, this.message().version.latest, placeholder
                 );
+                this.sendManager.playSuccessSound(sender);
                 return;
             }
 
@@ -166,6 +167,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             this.sendManager.sendMessageFromThread(
                     sender, this.message().version.download, placeholder
             );
+            this.sendManager.playSuccessSound(sender);
         });
     }
 
@@ -202,6 +204,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         this.sendManager.sendMessage(
                 sender, this.message().plugin.reload, placeholder
         );
+        this.sendManager.playSuccessSound(sender);
     }
 
     public void handleSet(final CommandSender sender, final String[] args, final PluginPlaceholder placeholder) {
@@ -349,6 +352,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         this.sendManager.sendMessage(
                 sender, commandSubConfig.set, placeholder
         );
+        this.sendManager.playSuccessSound(sender);
         this.cooldownManager.newCooldown(player.getUniqueId(), TimeUnit.SECONDS.toMillis(
                 this.configFile.commandSettings.cooldown
         ));
@@ -449,6 +453,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         this.sendManager.sendMessage(
                 sender, commandSubConfig.clear, placeholder
         );
+        this.sendManager.playSuccessSound(sender);
         this.cooldownManager.newCooldown(player.getUniqueId(), TimeUnit.SECONDS.toMillis(
                 this.configFile.commandSettings.cooldown
         ));

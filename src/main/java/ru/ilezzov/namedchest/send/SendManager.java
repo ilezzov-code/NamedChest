@@ -1,6 +1,5 @@
 package ru.ilezzov.namedchest.send;
 
-import lombok.AllArgsConstructor;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
@@ -35,10 +34,19 @@ public class SendManager {
     }
 
     public void playErrorSound(final CommandSender sender) {
-        final ConfigFile.ErrorSound errorSound = this.configFile.errorSound;
+        final ConfigFile.PluginSound errorSound = this.configFile.errorSound;
         if (errorSound.enable) {
             sender.playSound(
                     Sound.sound(Key.key(errorSound.sound), Sound.Source.PLAYER, errorSound.volume, errorSound.pitch)
+            );
+        }
+    }
+
+    public void playSuccessSound(final CommandSender sender) {
+        final ConfigFile.PluginSound successSound = this.configFile.successSound;
+        if (successSound.enable) {
+            sender.playSound(
+                    Sound.sound(Key.key(successSound.sound), Sound.Source.PLAYER, successSound.volume, successSound.pitch)
             );
         }
     }

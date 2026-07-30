@@ -5,7 +5,6 @@ import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.CustomKey;
 import eu.okaeri.configs.annotation.Header;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -86,8 +85,6 @@ public class ConfigFile extends OkaeriConfig {
         @Comment("TimeUnit: SECONDS, MINUTES, HOURS, DAYS")
         public TimeUnit unit;
         public int value;
-
-        public Interval() {}
 
         public Interval(boolean enable, TimeUnit unit, int value) {
             this.enable = enable;
@@ -222,16 +219,33 @@ public class ConfigFile extends OkaeriConfig {
 
     @Comment({
             "",
-            "Звук при возникновении ошибки"
+            "The sound of a rejected action / Звук отклоненного действия"
     })
     @CustomKey("error-sound")
-    public ErrorSound errorSound = new ErrorSound();
+    public PluginSound errorSound = new PluginSound(true, "entity.villager.no", 1.0f, 1.0f);
 
-    public static class ErrorSound extends OkaeriConfig {
-        public boolean enable = true;
-        public String sound = "entity.villager.no";
-        public float volume = 1.0f;
-        public float pitch = 1.0f;
+    @Comment({
+            "",
+            "The sound of success action / Звук успешного действия"
+    })
+    @CustomKey("success-sound")
+    public PluginSound successSound = new PluginSound(true, "block.note_block.pling", 1.0f, 2.0f);
+
+    public static class PluginSound extends OkaeriConfig {
+        public boolean enable;
+        @Comment("Key sound / Ключ звука")
+        public String sound;
+        @Comment("Volume / Громкость")
+        public float volume;
+        @Comment("Tone / Тон")
+        public float pitch;
+
+        public PluginSound(boolean enable, String sound, float volume, float pitch) {
+            this.enable = enable;
+            this.sound = sound;
+            this.volume = volume;
+            this.pitch = pitch;
+        }
     }
 
     @Comment("")

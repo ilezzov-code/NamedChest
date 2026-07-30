@@ -172,6 +172,7 @@ public class PlayerUseNameTagEvent implements Listener {
         this.sendManager.sendMessage(
                 player, commandSubConfig.set, placeholder
         );
+        this.sendManager.playSuccessSound(player);
         this.cooldownManager.newCooldown(player.getUniqueId(), TimeUnit.SECONDS.toMillis(
                 this.configFile.commandSettings.cooldown
         ));
