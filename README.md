@@ -1,57 +1,72 @@
 <div align="center">
     <img src="img/logo/BannerRoundedEn.png" alt="">
-    <h4>Support versions: Paper: 1.18.2 — 1.21.x</h4>
-    <h1>Give a name to your chest</h1>
+    <h4>Supported versions: Paper: 1.18.2 — 1.21.x</h4>
+    <h1>Give your chest a unique name</h1>
 </div>
 
 <div align="center" content="">
     <a href="https://modrinth.com/plugin/namedchest">
-        <img src="img/social/modrinth.svg" width="">
+        <img src="img/places/Modrinth.svg" width="200">
+    </a>
+    <a href="">
+        <img src="img/places/Hangar.svg" width="200">
+    </a>
+    <a href="https://spigotmc.ru/resources/namedchest-gologrammnye-imena-pri-pomoschi-birok-dlja-vashix-xranilisch-1-18-2-1-21-x.3927/updates?ysclid=ms6l7m0y7b134784836">
+          <img src="img/places/SpigotRU.svg" width="200">
     </a>
 </div>
 
-### <a href="https://github.com/ilezzov-code/NamedChest/blob/main/README_RU.md"><img src="img/flags/ru.svg" width=15px> Выбрать русский README.md</a>
+### <a href="https://github.com/ilezzov-code/NamedChest/tree/main"><img src="img/flags/ru.svg" width=15px> Выбрать русский README.md</a>
 
-##  <a>Table of Contents</a>
+## <a>[📋] Table of Contents</a>
 
-- [About](#about)
+- [Description](#about)
 - [Features](#features)
-- [Config.yml](#config)
-- [Commands](#commands)
-- [Permissions](#permissions)
+- [Requirements and dependencies](#requirements)
+- [Configuration](#config)
+- [Commands and permissions](#commands-permissions)
 - [Links](#links)
-- [Buy me coffee](#donate)
-- [Report a bug](https://github.com/ilezzov-code/namedchest/issues)
+- [Support the developer](#donate)
+- [Report a bug](https://github.com/ilezzov-code/NamedChest/issues/new)
+- [License](LICENSE)
 
 
-## <a id="about">About</a>
+## <a id="about">[🐲] Description</a>
 
-**NamedChest** — is a unique plugin that allows you to name different blocks in Minecraft using commands, tags, and anvils! The name will be displayed as a hologram when you hover the cursor over it.
-## <a id="features">Features</a>
+**NamedChest** is a unique plugin that allows you to give names to various blocks in Minecraft using commands, name tags, and anvils! The name will be displayed as a hologram when hovered over.
 
-* **[🔥] Hologram display on cursor hover** → [more details](#cursor-hover)
-* **[🆕] Supporting WorldGuard**
-* Support for 2 languages (Russian, English) + the ability to create your own translation
-* Support for 11 blocks → [more details](#supporting-blocks)
-* Configuration of maximum distance to the block
-* Support for MiniMessage in names → [more details](#minimessage-support)
-* Assigning names using tags → [more details](#support-nametag)
-* Setting maximum name length
-* Save / Delete name when breaking a block
-* Allow / Deny names via an anvil
-* Allow / Deny support for spaces
-* Full customization:
-  * Enable / Disable each feature
-  * Delay for using each command
-  * Detailed permission system
+## <a id="features">[⭐] Features</a>
+* **[🔥] Display names as holograms on hover** → [read more](details/details_en.md#hologram-names)
+* [🆕] WorldGuard support → [read more](details/details_en.md#worldguard)
+* [🆕] DecentHolograms support
+* [🆕] Dynamic hologram repositioning based on player movement → [read more](details/details_en.md#dynamic-position)
+* Renaming using name tags, commands, and anvils → [read more](details/details_en.md#renaming-methods)
+* Support for 15 blocks, ignoring vegetation and fluids → [read more](details/details_en.md#supported-blocks)
+* Any Minecraft color code format → [read more](details/details_en.md#color-format)
+* Name length limits
+* Configurable block search distance
+* Enable / Disable the following features:
+    * Saving names when blocks are broken
+    * Restricting anvil usage
+    * Space support
+    * Name tag support
+    * `set` and `clear` commands
+* Configurable cooldown for commands and name tags
+* Support for 2 languages (English, Russian) + ability to add custom translations
+* Version control and security
 
+## <a id="requirements">[⚙️] Requirements and dependencies</a>
+* **Server Core:** Paper-1.18.2 (Purpur, Leaf, and other forks)
+* **Java:** 17 or higher
+* **Dependencies**:
+    * [WorldGuard (optional)](https://github.com/EngineHub/WorldGuard)
+    * [DecentHolograms (optional)](https://github.com/DecentSoftware-eu/DecentHolograms)
 
-## <a id="config">Config.yml</a>
-
+## <a id="config">[🐍] Configuration (config.yml)</a>
 <details>
-    <summary>Looks config.yml</summary>
+    <summary>View config.yml</summary>
 
-```yaml
+```yml
 # ███╗░░██╗░█████╗░███╗░░░███╗███████╗██████╗░░░░█████╗░██╗░░██╗███████╗░██████╗████████╗
 # ████╗░██║██╔══██╗████╗░████║██╔════╝██╔══██╗░░██╔══██╗██║░░██║██╔════╝██╔════╝╚══██╔══╝
 # ██╔██╗██║███████║██╔████╔██║█████╗░░██║░░██║░░██║░░╚═╝███████║█████╗░░╚█████╗░░░░██║░░░
@@ -60,187 +75,181 @@
 # ╚═╝░░╚══╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝╚═════╝░░░░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░░░░╚═╝░░░
 
 # Developer / Разработчик: ILeZzoV
+# More plugins / Больше плагинов: https://t.me/ilezzov_plugins
 
 # Socials / Ссылки:
 # • Contact with me / Связаться: https://t.me/ilezovofficial
-# • Telegram Channel / Телеграм канал: https://t.me/ilezzov
+# • Telegram Channel / Телеграм канал: https://t.me/ilezzov_plugins
 # • GitHub: https://github.com/ilezzov-code
 
 # By me coffee / Поддержать разработчика:
-# • DA: https://www.donationalerts.com/r/ilezzov_dev
+# • DA: https://www.donationalerts.com/r/ilezov
 # • YooMoney: https://yoomoney.ru/to/4100118180919675
 # • Telegram Gift: https://t.me/ilezovofficial
-# • TON: UQCInXoHOJAlMpZ-8GIHqv1k0dg2E4pglKAIxOf3ia5xHmKV
-# • BTC: 1KCM1QN9TNYRevvQD63UF81oBRSK67vCon
-# • Card: 5536914188326494
+# • TON: UQBENFaqzv19GBR1EnDKad_nAOB--Ofsdk1FeRU7W3xprRLY
+# • BTC: bc1qn0f9yvcsacvedjk6qzu9cvagchkcz28gqrg2eh
+# • ETH: 0xbE7f260b952b87578079C0D6E03d3641425718c9
+# • Card: 2200700733487101
 
 # Supporting messages languages / Доступные языки сообщений:
-# ru-RU, en-US
-language: "en-US"
+# en-US, ru-RU
+language: en-US
 
-# Check the plugin for updates
-# Проверять плагин на наличие обновлений
-check_updates: true
+version-control:
+  # Check for updates on server startup
+  # Проверять ли наличие обновлений при запуске сервера
+  check-on-startup: true
 
-# Enable / Disable the option to name a block | Включить / Отключить возможность давать имя блоку
+  # Background update check interval
+  # Интервал автоматической проверки обновлений в фоне
+  check-interval:
+    enable: true
+    # TimeUnit: SECONDS, MINUTES, HOURS, DAYS
+    unit: HOURS
+    value: 6
+
+  # Notify administrators about new versions on join
+  # Отправлять ли администраторам уведомление о наличии новой версии при входе на сервер
+  notify-admins-on-join: true
+
+  security:
+    # Automatically disable the plugin if the current version is no longer supported or if a critical vulnerability is found
+    # Warning: Setting true may disable important functionality
+
+    # Автоматическое отключение плагина, если текущая версия больше не поддерживается или если обнаружена критическая уязвимость
+    # Внимание: Установка значения true может привести к отключению важной функциональности
+    lockdown-on-critical: false
+
+    # How often to spam online admins in chat
+    # about the need to urgently install a critical patch
+    # Set to 0 to notify only once on join
+
+    # Как часто спамить администраторам онлайн в чат
+    # о необходимости срочно установить критический патч
+    # Установите 0, чтобы уведомлять только один раз при входе
+    critical-notify-interval:
+      enable: true
+      # TimeUnit: SECONDS, MINUTES, HOURS, DAYS
+      unit: MINUTES
+      value: 10
+
+# Blocks that can be named / Блоки, которым можно будет дать имя
 # Supporting blocks / Поддерживаемые блоки: CHEST (сундук), TRAPPED_CHEST (сундук-ловушка),
 # BARREL (бочка), FURNACE (печка), SMOKER (коптильня), BLAST_FURNACE (плавильня), HOPPER (воронка),
 # DISPENSER (раздатчик), DROPPER (выбрасыватель), BREWING_STAND (варочная стойка), SHULKER_BOX (шалкер бокс)
-supporting_block:
-  - CHEST
-  - TRAPPED_CHEST
+supported-blocks:
   - BARREL
-  - FURNACE
-  - SMOKER
   - BLAST_FURNACE
-  - HOPPER
+  - BREWING_STAND
+  - CHEST
   - DISPENSER
   - DROPPER
-  - BREWING_STAND
+  - FURNACE
+  - HOPPER
   - SHULKER_BOX
+  - SMOKER
+  - TRAPPED_CHEST
+  - WAXED_COPPER_CHEST
+  - WAXED_EXPOSED_COPPER_CHEST
+  - WAXED_WEATHERED_COPPER_CHEST
+  - WAXED_OXIDIZED_COPPER_CHEST
+
+# Whether to ignore passable obstacles (such as tall grass, signs, fluids, etc.) when hovering over a block
+# Следует ли игнорировать проходимые, но встречающиеся препятствия (например, высокую траву, знаки, жидкости, ..) при наведение курсора на блок
+ignore-passable-blocks: true
 
 # Maximum distance to the block / Максимальная дистанция до блока
-max_distance: 5
+max-distance: 5
+
+# Enable supporting WorldGuard / Включить поддержку WorldGuard
+# WorldGuard is a Minecraft plugin — https://github.com/EngineHub/WorldGuard
+support-worldguard: true
 
 # Item's name settings / Настройки имени блока
-name_settings:
+name-settings:
   # Enable support color name / Включить поддержку цветных имен
-  support_color: true
+  support-color: true
   # Max name length / Максимальная длинна имени
-  max_name_length: 25
+  max-length: 25
   # Save the name when the block is destroyed / Сохранять имя при разрушении блока
-  save_for_breaking: false
+  save-when-breaking: false
   # Forbid giving a name through an anvil / Запретить давать имя через наковальню
-  cancel_anvil: true
+  cancel-anvil: false
   # Support for spaces in the name / Поддержка пробелов в имени
-  support_spaces: true
+  support-spaces: true
+  # Giving names through a name tag / Давать имена через бирку
+  support-name-tag: true
 
-# Enable / Disable plugin commands
-# Включить / Выключить команды плагина
-command_settings:
-  enable_set: true # Enable command /nc set | Включить команду /nc set
-  enable_clear: true # Enable command /nc clear | Включить команду /nc clear
-  cooldown: 5 # Cooldown in using commands in seconds | Задержка на использование команд в секундах
+# Command settings / Настройки команд
+command-settings:
+  # Enable command /nc set | Включить команду /nc set
+  enable-set: true
+  # Enable command /nc clear | Включить команду /nc clear
+  enable-clear: true
+  # Cooldown in using commands in seconds | Задержка на использование команд в секундах
+  cooldown: 5
 
-# Don't edit this / Не редактируйте это
-config_version: 1.2
+# The sound of a rejected action / Звук отклоненного действия
+error-sound:
+  enable: true
+  # Key sound / Ключ звука
+  sound: entity.villager.no
+  # Volume / Громкость
+  volume: 1.0
+  # Tone / Тон
+  pitch: 1.0
+
+# The sound of success action / Звук успешного действия
+success-sound:
+  enable: true
+  # Key sound / Ключ звука
+  sound: entity.experience_orb.pickup
+  # Volume / Громкость
+  volume: 1.0
+  # Tone / Тон
+  pitch: 2.0
+
+debug: false
 ```
-
 </details>
 
-## <a id="commands">Commands (/command → /alias1, /alias2, ... ※ `permission`)</a>
+## <a id="commands-permissions">[💻] Commands and permissions</a>
+| Command               | Description                       | Permissions                  |
+|-----------------------|-----------------------------------|------------------------------|
+| `/namedchest`         | Command help                      |                              | 
+| `/namedchest reload`  | Reload the plugin                 | `namedchest.reload`          |
+| `/namedchest version` | Get the latest plugin version     | `namedchest.version.command` |
+| `/namedchest set`     | Set a block name                  | `namedchest.name.set`        |
+| `/namedchest clear`   | Clear a block name                | `namedchest.name.clear`      |
 
-### /namedchest reload → /nc reload ※ `namedchest.reload`
+### Other permissions
+| Permission                   | Description                                           |
+|------------------------------|-------------------------------------------------------|
+| `namedchest.*`               | All plugin features                                   |
+| `namedchest.no_cooldown`     | Disables cooldown for plugin functions                |
+| `namedchest.name.set.color`  | Allow setting colored names                           |
+| `namedchest.name.max.length` | Bypass name length limit                              |
+| `namedchest.ignore_regions`  | Ignore WorldGuard regions                             |
+| `namedchest.version.notify`  | Notify about new versions and critical patches        |
 
-* Reload the plugin configuration
+## <a id="links">[🖇️] Links</a>
+* Contact: [TG](https://t.me/ilezovofficial), [Email](mailto:ilezov.morozov@yandex.com)
+* Telegram channel: [click](https://t.me/+o7693l_-Y8lmYzMy)
+* Modrinth: [click](https://modrinth.com/plugin/namedchest)
+* SpigotRU: [click](https://spigotmc.ru/resources/namedchest-gologrammnye-imena-pri-pomoschi-birok-dlja-vashix-xranilisch-1-18-2-1-21-x.3927/updates?ysclid=ms6l7m0y7b134784836)
+* Hangar: soon
 
-### /namedchest version → /nc version ※ ``
-
-* Check the latest plugin version
-
-### /namedchest set → /nc set ※ `namedchest.name.set`
-
-* Set the name of a block
-
-### /namedchest clear → /nc clear ※ `namedchest.name.clear`
-
-* Clear the block's name
-
-
-## <a id="permissions">All plugin permissions</a>
-
-| Право                      | Описание                                           |
-|----------------------------|----------------------------------------------------|
-| namedchest.*               | Access to all plugin features                      |
-| namedchest.reload          | Access to reload the plugin /nc reload             |
-| namedchest.no_cooldown     | Disable cooldown for any feature                   |
-| namedchest.name.set        | Access to the /nc set command                      |
-| namedchest.name.set.color  | Allow setting colored names                        |
-| namedchest.name.clear      | Access to the /nc clear command                    |
-| namedchest.name.max.length | Remove maximum length restriction for names        |
-| namedchest.ignore_regions  | Access to set names in other regions of WorldGuard |
-
-## <a id="cursor-hover">Hologram display on cursor hover 🔥</a>
-
-This is a unique feature of the plugin that enhances performance. Names are only displayed when hovering over an item — this allows spawning holograms only at the necessary moment, significantly reducing Entity count and load.
-
-Names appear next to chests on the side the player is facing.
-
-<img src="img/gifs/cursor-hover.gif" width="400">
-
-## <a id="supporting-blocks">Supporting Blocks</a>
-
-The plugin supports 11 blocks:
-
-- CHEST (chest)
-- TRAPPED_CHEST (trapped-chest)
-- BARREL (barrel)
-- FURNACE (furnace)
-- SMOKER (smoker)
-- BLAST_FURNACE (blast furnace)
-- HOPPER (hopper)
-- DISPENSER (dispenser)
-- DROPPER (dropper)
-- BREWING_STAND (brewing stand)
-- SHULKER_BOX (shulker box)
-
-<img src="img/gifs/supporting-blocks.gif" width="400">
-
-You can customize which blocks to include or exclude in the plugin configuration under the `supporting_block` section.
-
-<details>
-  <summary>config.yml → supporting_blocks</summary>
-
-```yml
-supporting_block:
-  - CHEST
-  - TRAPPED_CHEST
-  - BARREL
-  - FURNACE
-  - SMOKER
-  - BLAST_FURNACE
-  - HOPPER
-  - DISPENSER
-  - DROPPER
-  - BREWING_STAND
-  - SHULKER_BOX   
- ```
-</details>
-
-## <a id="minimessage-support">Support MiniMessage</a>
-
-The plugin supports all types of message formatting.
-
-- LEGACY — Color with & / § and HEX with &#rrggbb / §#rrggbb or &x&r&r&g&g&b&b / §x§r§r§g§g§b§b
-- LEGACY_ADVANCED — Color and HEX with &##rrggbb / §##rrggbb
-- MINI_MESSAGE — Color with <color> More info — https://docs.advntr.dev/minimessage/index.html
-
-And all formats available at https://www.birdflop.com/resources/rgb/  
-You can use all formats simultaneously in one message. The plugin supports this.
-
-## <a id="support-nametag">Naming via Name Tags</a>
-
-You can assign names to blocks using tags.
-
-<img src="img/gifs/support-nametag.gif" width="400">
-
-## <a id="links">Links</a>
-
-* Contact: https://t.me/ilezovofficial
-* Telegram Channel: https://t.me/ilezzov
-* Modrinth: https://modrinth.com/plugin/namedchest
-
-## <a id="donate">Buy me coffee</a>
-
+## <a id="donate">[❤️] Support the developer</a>
 * DA: https://www.donationalerts.com/r/ilezov
 * YooMoney: https://yoomoney.ru/to/4100118180919675
 * Telegram Gift: https://t.me/ilezovofficial
-* TON: UQCInXoHOJAlMpZ-8GIHqv1k0dg2E4pglKAIxOf3ia5xHmKV
-* BTC: 1KCM1QN9TNYRevvQD63UF81oBRSK67vCon
-* Card: 5536914188326494
+* TON: UQBENFaqzv19GBR1EnDKad_nAOB--Ofsdk1FeRU7W3xprRLY
+* BTC: bc1qn0f9yvcsacvedjk6qzu9cvagchkcz28gqrg2eh
+* ETH: 0xbE7f260b952b87578079C0D6E03d3641425718c9
+* Card: 2200700733487101
 
-## Found an issue or have a question? Create a new issue — https://github.com/ilezzov-code/NamedChest/issues/new
+## <a>[🌋] Report a bug</a>
+Found a bug, have a question, or want to give advice — https://github.com/ilezzov-code/NamedChest/issues/new
 
-## <a id="license">License</a>
-
-This project is distributed under the `GPL-3.0 License`. For more details, see the LICENSE file.
+## <a>[🪪] License</a>
+This project is distributed under the `GPL-3.0 License`. For more details, see the [LICENSE](LICENSE) file.
