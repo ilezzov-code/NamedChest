@@ -17,11 +17,10 @@ import ru.ilezzov.namedchest.file.ConfigFile;
 import ru.ilezzov.namedchest.file.MessageFile;
 import ru.ilezzov.namedchest.permission.PermissionManager;
 import ru.ilezzov.namedchest.permission.Permissions;
-import ru.ilezzov.namedchest.send.SendManager;
 import ru.ilezzov.namedchest.placeholder.PluginPlaceholder;
+import ru.ilezzov.namedchest.send.SendManager;
 import ru.ilezzov.namedchest.utils.Utils;
 
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerUseAnvilEvent implements Listener {

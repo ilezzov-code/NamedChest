@@ -1,6 +1,5 @@
 package ru.ilezzov.namedchest.model;
 
-
 public record Response<T>(boolean success, String message, T data, Exception error) {
     public static <T> Response<T> ok() {
         return new Response<>(true, "OK", null, null);

@@ -5,7 +5,6 @@ import eu.decentsoftware.holograms.api.holograms.Hologram;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Location;
-import org.bukkit.block.BlockFace;
 import ru.ilezzov.namedchest.display.MyHologram;
 
 import java.util.List;
